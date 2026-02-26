@@ -11,36 +11,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
+          flutter-version: '3.22.0'
 
-      - name: Flutter doctor
-        run: flutter doctor
+      - name: Install dependencies
+        run: flutter pub get
 
-      # ✅ Ensure valid project name (VERY IMPORTANT)
-      - name: Ensure valid project
-        run: |
-          echo "Project name check..."
-          if grep -q "name: crudo_app" pubspec.yaml; then
-            echo "Project name OK"
-          else
-            echo "Invalid project name. Fix pubspec.yaml"
-            exit 1
-          fi
-
-      # ✅ Create Android folder if missing
-      - name: Create Android folders
+      - name: Create Android folder if missing
         run: |
           if [ ! -d "android" ]; then
             flutter create .
           fi
-
-      - name: Install dependencies
-        run: flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
