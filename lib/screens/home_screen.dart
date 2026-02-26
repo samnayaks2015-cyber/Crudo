@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/cart_service.dart';
-import 'cart_screen.dart';
+import '../screens/cart_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,29 +29,3 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          _productTile(context, 'Cow Milk', 90),
-          _productTile(context, 'Buffalo Milk', 130),
-        ],
-      ),
-    );
-  }
-
-  Widget _productTile(BuildContext context, String name, double price) {
-    final cart = Provider.of<CartService>(context, listen: false);
-
-    return ListTile(
-      title: Text(name),
-      subtitle: Text('₹$price'),
-      trailing: ElevatedButton(
-        onPressed: () {
-          cart.addItem(name, price);
-        },
-        child: const Text('Add'),
-      ),
-    );
-  }
-}
