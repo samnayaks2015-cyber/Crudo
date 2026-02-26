@@ -16,6 +16,13 @@ jobs:
         with:
           flutter-version: '3.22.0'
 
+      # ✅ CREATE ANDROID PROJECT (VERY IMPORTANT)
+      - name: Create Flutter project if missing
+        run: |
+          if [ ! -d "android" ]; then
+            flutter create .
+          fi
+
       - run: flutter pub get
 
       - run: flutter build apk --release
