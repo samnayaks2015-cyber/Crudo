@@ -23,54 +23,10 @@ class CrudoApp extends StatelessWidget {
           primarySwatch: Colors.green,
           scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         ),
-        home: const MainNavigation(),
-      ),
-    );
-  }
-}
-
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
-
-  @override
-  State<MainNavigation> createState() => _MainNavigationState();
-}
-
-class _MainNavigationState extends State<MainNavigation> {
-  int currentIndex = 0;
-
-  final List<Widget> screens = const [
-    HomeScreen(),
-    CartScreen(),
-    Center(child: Text("Profile coming soon")),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: screens[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.green,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+        home: const HomeScreen(),
+        routes: {
+          CartScreen.routeName: (_) => const CartScreen(),
         },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
       ),
     );
   }
