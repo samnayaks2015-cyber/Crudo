@@ -22,11 +22,7 @@ class CrudoApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-
-        // ✅ HOME
         home: const HomeScreen(),
-
-        // ✅ ROUTES
         routes: {
           CartScreen.routeName: (context) => const CartScreen(),
         },
