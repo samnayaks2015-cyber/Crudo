@@ -13,46 +13,46 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('CRUDO'),
         actions: [
-          Center(
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/cart');
+            },
             child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Text('Cart: ${cart.itemCount}'),
+              padding: const EdgeInsets.all(12),
+              child: Center(
+                child: Text(
+                  'Cart: ${cart.itemCount}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
           ),
         ],
       ),
       body: ListView(
-        children: const [
-          ProductTile(name: 'Cow Milk', price: 90),
-          ProductTile(name: 'Buffalo Milk', price: 130),
+        padding: const EdgeInsets.all(16),
+        children: [
+          _productTile(context, 'Cow Milk', 90),
+          _productTile(context, 'Buffalo Milk', 130),
         ],
       ),
     );
   }
-}
 
-class ProductTile extends StatelessWidget {
-  final String name;
-  final double price;
-
-  const ProductTile({
-    super.key,
-    required this.name,
-    required this.price,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _productTile(BuildContext context, String name, double price) {
     final cart = Provider.of<CartService>(context, listen: false);
 
-    return ListTile(
-      title: Text(name),
-      subtitle: Text('₹$price'),
-      trailing: ElevatedButton(
-        onPressed: () {
-          cart.addItem(name, price);
-        },
-        child: const Text('Add'),
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: ListTile(
+        title: Text(name),
+        subtitle: Text('₹$price'),
+        trailing: ElevatedButton(
+          onPressed: () {
+            cart.addItem(name, price);
+          },
+          child: const Text('Add'),
+        ),
       ),
     );
   }
