@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crudo Store'),
+        title: const Text('CRUDO'),
         actions: [
           Stack(
             children: [
@@ -51,24 +51,37 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: ListView(
-        children: [
-          _productTile(context, 'Apple', 120),
-          _productTile(context, 'Banana', 60),
-          _productTile(context, 'Mango', 150),
-          _productTile(context, 'Orange', 80),
+        children: const [
+          ProductTile(name: 'Cow Milk', price: 90),
+          ProductTile(name: 'Buffalo Milk', price: 130),
+          ProductTile(name: 'Tomato', price: 20),
+          ProductTile(name: 'Potato', price: 25),
         ],
       ),
     );
   }
+}
 
-  Widget _productTile(BuildContext context, String name, double price) {
+class ProductTile extends StatelessWidget {
+  final String name;
+  final double price;
+
+  const ProductTile({
+    super.key,
+    required this.name,
+    required this.price,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<CartService>(context, listen: false);
+
     return ListTile(
       title: Text(name),
       subtitle: Text('₹$price'),
       trailing: ElevatedButton(
         onPressed: () {
-          Provider.of<CartService>(context, listen: false)
-              .addItem(name, price);
+          cart.addItem(name, price);
         },
         child: const Text('Add'),
       ),
