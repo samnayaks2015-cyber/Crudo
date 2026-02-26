@@ -6,7 +6,6 @@ class CartService extends ChangeNotifier {
 
   List<CartItem> get items => _items;
 
-  // ✅ ADD ITEM
   void addItem(String name, double price) {
     final index = _items.indexWhere((e) => e.name == name);
 
@@ -19,32 +18,31 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ✅ REMOVE ITEM
   void removeItem(String name) {
     _items.removeWhere((e) => e.name == name);
     notifyListeners();
   }
 
-  // ✅ CLEAR CART
   void clearCart() {
     _items.clear();
     notifyListeners();
   }
 
-  // 🔥🔥🔥 THIS WAS MISSING
+  // ✅ REQUIRED BY UI
+  int get itemCount {
+    int count = 0;
+    for (var item in _items) {
+      count += item.quantity;
+    }
+    return count;
+  }
+
+  // ✅ REQUIRED BY UI
   double get totalAmount {
     double total = 0;
     for (var item in _items) {
       total += item.price * item.quantity;
     }
     return total;
-  }
-
-  int get totalItems {
-    int count = 0;
-    for (var item in _items) {
-      count += item.quantity;
-    }
-    return count;
   }
 }
