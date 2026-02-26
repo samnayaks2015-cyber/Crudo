@@ -12,7 +12,13 @@ class CartService extends ChangeNotifier {
     if (index >= 0) {
       _items[index].quantity++;
     } else {
-      _items.add(CartItem(name: name, price: price));
+      _items.add(
+        CartItem(
+          name: name,
+          price: price,
+          quantity: 1,
+        ),
+      );
     }
 
     notifyListeners();
@@ -23,6 +29,12 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
+  }
+
+  // ✅ REQUIRED BY UI
   int get itemCount {
     int count = 0;
     for (var item in _items) {
@@ -31,6 +43,7 @@ class CartService extends ChangeNotifier {
     return count;
   }
 
+  // ✅ REQUIRED BY UI
   double get totalAmount {
     double total = 0;
     for (var item in _items) {
