@@ -6,63 +6,36 @@ class CartService extends ChangeNotifier {
 
   List<CartItem> get items => _items;
 
-  int get totalItems =>
-      _items.fold(0, (sum, item) => sum + item.quantity);
+  void addItem(String name, double price) {
+    final index = _items.indexWhere((e) => e.name == name);
 
-  double get totalPrice =>
-      _items.fold(0, (sum, item) => sum + item.total);
-
-  // ADD TO CART
-  void addToCart(String id, String name, double price) {
-    try {
-      final index = _items.indexWhere((item) => item.id == id);
-
-      if (index >= 0) {
-        _items[index].quantity++;
-      } else {
-        _items.add(
-          CartItem(
-            id: id,
-            name: name,
-            price: price,
-          ),
-        );
-      }
-
-      notifyListeners();
-    } catch (e) {
-      debugPrint("Cart error: $e");
-    }
-  }
-
-  // REMOVE ITEM
-  void removeItem(String id) {
-    _items.removeWhere((item) => item.id == id);
-    notifyListeners();
-  }
-
-  // INCREASE
-  void increaseQty(String id) {
-    final item = _items.firstWhere((item) => item.id == id);
-    item.quantity++;
-    notifyListeners();
-  }
-
-  // DECREASE
-  void decreaseQty(String id) {
-    final item = _items.firstWhere((item) => item.id == id);
-
-    if (item.quantity > 1) {
-      item.quantity--;
+    if (index >= 0) {
+      _items[index].quantity++;
     } else {
-      removeItem(id);
+      _items.add(CartItem(name: name, price: price));
     }
 
     notifyListeners();
   }
 
-  void clearCart() {
-    _items.clear();
+  void removeItem(String name) {
+    _items.removeWhere((e) => e.name == name);
     notifyListeners();
+  }
+
+  int get itemCount {
+    int count = 0;
+    for (var item in _items) {
+      count += item.quantity;
+    }
+    return count;
+  }
+
+  double get totalAmount {
+    double total = 0;
+    for (var item in _items) {
+      total += item.price * item.quantity;
+    }
+    return total;
   }
 }
