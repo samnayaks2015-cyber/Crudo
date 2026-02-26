@@ -1,27 +1,68 @@
-class CartService {
-  static final CartService _instance = CartService._internal();
+import 'package:flutter/material.dart';
+import '../models/cart_item.dart';
 
-  factory CartService() {
-    return _instance;
+class CartService extends ChangeNotifier {
+  final List<CartItem> _items = [];
+
+  List<CartItem> get items => _items;
+
+  int get totalItems =>
+      _items.fold(0, (sum, item) => sum + item.quantity);
+
+  double get totalPrice =>
+      _items.fold(0, (sum, item) => sum + item.total);
+
+  // ADD TO CART
+  void addToCart(String id, String name, double price) {
+    try {
+      final index = _items.indexWhere((item) => item.id == id);
+
+      if (index >= 0) {
+        _items[index].quantity++;
+      } else {
+        _items.add(
+          CartItem(
+            id: id,
+            name: name,
+            price: price,
+          ),
+        );
+      }
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Cart error: $e");
+    }
   }
 
-  CartService._internal();
-
-  final List<Map<String, dynamic>> _cartItems = [];
-
-  List<Map<String, dynamic>> get cartItems => _cartItems;
-
-  void addItem(Map<String, dynamic> item) {
-    _cartItems.add(item);
+  // REMOVE ITEM
+  void removeItem(String id) {
+    _items.removeWhere((item) => item.id == id);
+    notifyListeners();
   }
 
-  void removeItem(int index) {
-    _cartItems.removeAt(index);
+  // INCREASE
+  void increaseQty(String id) {
+    final item = _items.firstWhere((item) => item.id == id);
+    item.quantity++;
+    notifyListeners();
+  }
+
+  // DECREASE
+  void decreaseQty(String id) {
+    final item = _items.firstWhere((item) => item.id == id);
+
+    if (item.quantity > 1) {
+      item.quantity--;
+    } else {
+      removeItem(id);
+    }
+
+    notifyListeners();
   }
 
   void clearCart() {
-    _cartItems.clear();
+    _items.clear();
+    notifyListeners();
   }
-
-  int get itemCount => _cartItems.length;
 }
