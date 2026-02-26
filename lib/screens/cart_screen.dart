@@ -1,135 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../models/cart_item.dart';
 
-import '../services/cart_service.dart';
+class CartService extends ChangeNotifier {
+  final List<CartItem> _items = [];
 
-class CartScreen extends StatelessWidget {
-const CartScreen({super.key});
+  List<CartItem> get items => _items;
 
-@override
-Widget build(BuildContext context) {
-final cart = Provider.of<CartService>(context);
+  // ✅ ADD ITEM
+  void addItem(String name, double price) {
+    final index = _items.indexWhere((e) => e.name == name);
 
-return Scaffold(
-  appBar: AppBar(
-    title: const Text('My Cart'),
-    backgroundColor: Colors.green,
-    centerTitle: true,
-  ),
-  body: cart.items.isEmpty
-      ? const Center(
-          child: Text(
-            'Your cart is empty',
-            style: TextStyle(fontSize: 18),
-          ),
-        )
-      : Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: cart.items.length,
-                itemBuilder: (context, index) {
-                  final item = cart.items.values.toList()[index];
+    if (index >= 0) {
+      _items[index].quantity++;
+    } else {
+      _items.add(CartItem(name: name, price: price));
+    }
 
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        // icon
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.local_drink,
-                            color: Colors.white,
-                          ),
-                        ),
+    notifyListeners();
+  }
 
-                        const SizedBox(width: 12),
+  // ✅ REMOVE ITEM
+  void removeItem(String name) {
+    _items.removeWhere((e) => e.name == name);
+    notifyListeners();
+  }
 
-                        // name + price
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Text(
-                                '₹${item.price} x ${item.quantity}',
-                              ),
-                            ],
-                          ),
-                        ),
+  // ✅ CLEAR CART
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
+  }
 
-                        // remove button
-                        IconButton(
-                          onPressed: () {
-                            cart.removeItem(item.id);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+  // 🔥🔥🔥 THIS WAS MISSING
+  double get totalAmount {
+    double total = 0;
+    for (var item in _items) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
 
-            // 🔥 Total section
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 6,
-                    color: Colors.black12,
-                  )
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Total: ₹${cart.totalAmount.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    child: const Text('Checkout'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-);
-
-}
+  int get totalItems {
+    int count = 0;
+    for (var item in _items) {
+      count += item.quantity;
+    }
+    return count;
+  }
 }
