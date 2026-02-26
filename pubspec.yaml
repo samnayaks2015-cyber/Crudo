@@ -1,5 +1,5 @@
-name: crudo_app
-description: a new flutter project.
+name: crudo
+description: Crudo Milk Delivery App
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -11,5 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/logo.png
+    - assets/splash.png
