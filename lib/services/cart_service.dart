@@ -12,7 +12,13 @@ class CartService extends ChangeNotifier {
     if (index >= 0) {
       _items[index].quantity++;
     } else {
-      _items.add(CartItem(name: name, price: price));
+      _items.add(
+        CartItem(
+          name: name,
+          price: price,
+          quantity: 1,
+        ),
+      );
     }
 
     notifyListeners();
