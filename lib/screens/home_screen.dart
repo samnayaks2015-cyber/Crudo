@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../services/cart_service.dart';
 import 'cart_screen.dart';
 
@@ -17,15 +16,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const CartScreen(),
-                ),
-              );
+              Navigator.pushNamed(context, CartScreen.routeName);
             },
             child: Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.all(12),
               child: Center(
                 child: Text(
                   'Cart: ${cart.count}',
@@ -33,36 +27,24 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
       body: ListView(
         children: [
-          _productTile(
-            context,
-            name: 'Cow Milk',
-            price: 90,
-          ),
-          _productTile(
-            context,
-            name: 'Buffalo Milk',
-            price: 130,
-          ),
+          _itemTile(context, 'Cow Milk', 90),
+          _itemTile(context, 'Buffalo Milk', 130),
         ],
       ),
     );
   }
 
-  Widget _productTile(
-    BuildContext context, {
-    required String name,
-    required double price,
-  }) {
+  Widget _itemTile(BuildContext context, String name, double price) {
     final cart = Provider.of<CartService>(context, listen: false);
 
     return ListTile(
       title: Text(name),
-      subtitle: Text('₹${price.toStringAsFixed(1)}'),
+      subtitle: Text('₹$price'),
       trailing: ElevatedButton(
         onPressed: () {
           cart.addItem(name, price);
