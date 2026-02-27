@@ -6,41 +6,33 @@ class CartService extends ChangeNotifier {
 
   List<CartItem> get items => _items;
 
-  void addItem(String name, double price) {
-    final index = _items.indexWhere((e) => e.name == name);
+  // ✅ THIS WAS MISSING — count getter
+  int get count => _items.length;
 
-    if (index >= 0) {
-      _items[index].quantity++;
-    } else {
-      _items.add(CartItem(name: name, price: price));
-    }
-
-    notifyListeners();
-  }
-
-  void removeItem(String name) {
-    _items.removeWhere((e) => e.name == name);
-    notifyListeners();
-  }
-
-  void clearCart() {
-    _items.clear();
-    notifyListeners();
-  }
-
-  int get itemCount {
-    int count = 0;
-    for (var item in _items) {
-      count += item.quantity;
-    }
-    return count;
-  }
-
+  // ✅ total amount
   double get totalAmount {
     double total = 0;
     for (var item in _items) {
-      total += item.price * item.quantity;
+      total += item.price;
     }
     return total;
+  }
+
+  // ✅ add item
+  void addItem(String name, double price) {
+    _items.add(CartItem(name: name, price: price));
+    notifyListeners();
+  }
+
+  // ✅ remove item
+  void removeItem(int index) {
+    _items.removeAt(index);
+    notifyListeners();
+  }
+
+  // ✅ clear cart
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
   }
 }
