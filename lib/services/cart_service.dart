@@ -1,38 +1,33 @@
 import 'package:flutter/material.dart';
-import '../models/cart_item.dart';
+import 'package:provider/provider.dart';
+import '../services/cart_service.dart';
 
-class CartService extends ChangeNotifier {
-  final List<CartItem> _items = [];
+class CartScreen extends StatelessWidget {
+  static const String routeName = '/cart';
 
-  List<CartItem> get items => _items;
+  const CartScreen({super.key});
 
-  // ✅ THIS WAS MISSING — count getter
-  int get count => _items.length;
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<CartService>(context);
 
-  // ✅ total amount
-  double get totalAmount {
-    double total = 0;
-    for (var item in _items) {
-      total += item.price;
-    }
-    return total;
-  }
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Cart'),
+      ),
+      body: cart.items.isEmpty
+          ? const Center(
+              child: Text('Your cart is empty'),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: cart.items.length,
+                    itemBuilder: (context, index) {
+                      final item = cart.items[index];
 
-  // ✅ add item
-  void addItem(String name, double price) {
-    _items.add(CartItem(name: name, price: price));
-    notifyListeners();
-  }
-
-  // ✅ remove item
-  void removeItem(int index) {
-    _items.removeAt(index);
-    notifyListeners();
-  }
-
-  // ✅ clear cart
-  void clearCart() {
-    _items.clear();
-    notifyListeners();
-  }
-}
+                      return ListTile(
+                        title: Text(item.name),
+                        subtitle: Text(
+                          '₹${item.price}
