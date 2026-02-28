@@ -6,21 +6,42 @@ class CartService extends ChangeNotifier {
 
   List<CartItem> get items => _items;
 
-  int get count => _items.length;
+  int get count => _items.fold(0, (sum, item) => sum + item.quantity);
 
-  double get total =>
-      _items.fold(0, (sum, item) => sum + item.price);
+  double get total => _items.fold(
+        0,
+        (sum, item) => sum + (item.price * item.quantity),
+      );
 
-  void addItem(String name, double price) {
-    _items.add(CartItem(name: name, price: price));
+  void addItem({required String name, required double price}) {
+    final index = _items.indexWhere((e) => e.name == name);
+
+    if (index >= 0) {
+      _items[index].quantity++;
+    } else {
+      _items.add(CartItem(name: name, price: price, quantity: 1));
+    }
+
+    notifyListeners();
+  }
+
+  void increaseQty(int index) {
+    _items[index].quantity++;
+    notifyListeners();
+  }
+
+  void decreaseQty(int index) {
+    if (_items[index].quantity > 1) {
+      _items[index].quantity--;
+    } else {
+      _items.removeAt(index);
+    }
     notifyListeners();
   }
 
   void removeItem(int index) {
-    if (index >= 0 && index < _items.length) {
-      _items.removeAt(index);
-      notifyListeners();
-    }
+    _items.removeAt(index);
+    notifyListeners();
   }
 
   void clearCart() {
