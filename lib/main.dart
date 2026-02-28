@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/cart_service.dart';
-import 'screens/home_screen.dart';
-import 'screens/cart_screen.dart';
+import 'screens/main_shell.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CrudoApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CrudoApp extends StatelessWidget {
+  const CrudoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +16,9 @@ class MyApp extends StatelessWidget {
       create: (_) => CartService(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Crudo Store',
-        routes: {
-          '/': (context) => const HomeScreen(),
-          CartScreen.routeName: (context) => const CartScreen(),
-        },
+        title: 'CRUDO',
+        theme: ThemeData(primarySwatch: Colors.green),
+        home: const MainShell(),
       ),
     );
   }
