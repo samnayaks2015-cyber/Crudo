@@ -11,16 +11,8 @@ class HomeScreen extends StatelessWidget {
     final cart = Provider.of<CartService>(context);
 
     final products = [
-      {
-        'name': 'Cow Milk',
-        'price': 90.0,
-        'image': 'assets/images/cow_milk.png'
-      },
-      {
-        'name': 'Buffalo Milk',
-        'price': 130.0,
-        'image': 'assets/images/buffalo_milk.png'
-      },
+      {'name': 'Cow Milk', 'price': 90.0},
+      {'name': 'Buffalo Milk', 'price': 130.0},
     ];
 
     return Scaffold(
@@ -35,7 +27,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const CartScreen()),
+                      builder: (_) => const CartScreen(),
+                    ),
                   );
                 },
               ),
@@ -67,21 +60,23 @@ class HomeScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.75,
+          childAspectRatio: 0.8,
         ),
         itemBuilder: (context, index) {
           final product = products[index];
 
           return Card(
             elevation: 6,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.asset(product['image'] as String, height: 90),
+                  const Icon(Icons.local_drink,
+                      size: 60, color: Colors.green),
                   Text(
                     product['name'] as String,
                     style: const TextStyle(
