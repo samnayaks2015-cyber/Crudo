@@ -15,26 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final CartService cart = CartService();
 
   final List<Map<String, dynamic>> products = [
-    {
-      "name": "Cow Milk",
-      "price": 90.0,
-      "icon": Icons.local_drink,
-    },
-    {
-      "name": "Buffalo Milk",
-      "price": 130.0,
-      "icon": Icons.water_drop,
-    },
-    {
-      "name": "Apple",
-      "price": 120.0,
-      "icon": Icons.apple,
-    },
-    {
-      "name": "Banana",
-      "price": 60.0,
-      "icon": Icons.set_meal,
-    },
+    {"name": "Cow Milk", "price": 90.0, "icon": Icons.local_drink},
+    {"name": "Buffalo Milk", "price": 130.0, "icon": Icons.water_drop},
+    {"name": "Apple", "price": 120.0, "icon": Icons.apple},
+    {"name": "Banana", "price": 60.0, "icon": Icons.set_meal},
   ];
 
   void addToCart(String name, double price) {
@@ -43,10 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$name added to cart'),
-        duration: const Duration(seconds: 1),
-      ),
+      SnackBar(content: Text('$name added to cart')),
     );
   }
 
@@ -68,11 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            product["icon"],
-            size: 48,
-            color: Colors.green,
-          ),
+          Icon(product["icon"], size: 48, color: Colors.green),
           const SizedBox(height: 10),
           Text(
             product["name"],
@@ -99,9 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
               ),
               child: const Text("Add"),
             ),
