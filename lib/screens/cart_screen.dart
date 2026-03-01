@@ -33,8 +33,7 @@ class CartScreen extends StatelessWidget {
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
                       cart.removeItem(index);
-                      Navigator.pop(context);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (_) => CartScreen(cart: cart),
