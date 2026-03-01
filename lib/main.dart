@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/cart_service.dart';
-import 'screens/main_shell.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const CrudoApp());
@@ -18,7 +18,7 @@ class CrudoApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'CRUDO',
         theme: ThemeData(primarySwatch: Colors.green),
-        home: const MainShell(),
+        home: const HomeScreen(),
       ),
     );
   }
