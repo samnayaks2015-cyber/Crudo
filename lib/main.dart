@@ -1,25 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'services/cart_service.dart';
+mport 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 
 void main() {
-  runApp(const CrudoApp());
+  runApp(const MyApp());
 }
 
-class CrudoApp extends StatelessWidget {
-  const CrudoApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CartService(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'CRUDO',
-        theme: ThemeData(primarySwatch: Colors.green),
-        home: const HomeScreen(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'CRUDO',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
       ),
+      home: const HomeScreen(),
     );
   }
 }
