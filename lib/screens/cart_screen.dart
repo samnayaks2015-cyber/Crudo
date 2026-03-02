@@ -1,46 +1,28 @@
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class CartScreen extends StatefulWidget {
+  final CartService cart;
+
+  const CartScreen({super.key, required this.cart});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  late CartService cart;
+
+  @override
+  void initState() {
+    super.initState();
+    cart = widget.cart;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cart = CartService.instance;
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Cart')),
-      body: cart.items.isEmpty
-          ? const Center(child: Text('Cart is empty'))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: cart.items.length,
-                    itemBuilder: (context, index) {
-                      final item = cart.items[index];
-                      return ListTile(
-                        title: Text(item.name),
-                        subtitle: Text('₹${item.price} x ${item.quantity}'),
-                        trailing: Text(
-                          '₹${item.price * item.quantity}',
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'Total: ₹${cart.total.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-    );
-  }
-}
+      backgroundColor: const Color(0xfff5f6fa),
+
+      appBar: AppBar(
+        title: const Text
