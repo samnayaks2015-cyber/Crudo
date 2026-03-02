@@ -30,16 +30,18 @@ class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
   final CartService cart = CartService();
 
+  void _openCart() {
+    setState(() {
+      _selectedIndex = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [
+    final pages = [
       HomeScreen(
         cart: cart,
-        onCartPressed: () {
-          setState(() {
-            _selectedIndex = 1;
-          });
-        },
+        onCartPressed: _openCart,
       ),
       CartScreen(cart: cart),
     ];
@@ -56,4 +58,7 @@ class _MainNavigationState extends State<MainNavigation> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem
