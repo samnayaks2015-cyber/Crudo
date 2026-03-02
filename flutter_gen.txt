@@ -1,1 +1,1 @@
-generate flutter folders
+flutter create .
