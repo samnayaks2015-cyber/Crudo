@@ -1,8 +1,6 @@
 name: Build APK
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -13,16 +11,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
+          flutter-version: '3.22.0'
+          cache: true
 
-      # ✅ CLEAN CREATE (THIS FIXES YOUR ERROR)
-      - name: Create fresh Flutter project
+      - name: Clean Gradle Cache (IMPORTANT)
         run: |
-          rm -rf android ios
-          flutter create .
+          rm -rf ~/.gradle/caches
+          rm -rf ~/.gradle/wrapper
 
       - name: Get dependencies
         run: flutter pub get
