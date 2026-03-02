@@ -9,7 +9,7 @@ class CartScreen extends StatelessWidget {
     final cart = CartService.instance;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Cart')),
+      appBar: AppBar(title: const Text('Your Cart')),
       body: cart.items.isEmpty
           ? const Center(child: Text('Cart is empty'))
           : Column(
@@ -21,8 +21,10 @@ class CartScreen extends StatelessWidget {
                       final item = cart.items[index];
                       return ListTile(
                         title: Text(item.name),
-                        subtitle: Text('Qty: ${item.quantity}'),
-                        trailing: Text('₹${item.price * item.quantity}'),
+                        subtitle: Text('₹${item.price} x ${item.quantity}'),
+                        trailing: Text(
+                          '₹${item.price * item.quantity}',
+                        ),
                       );
                     },
                   ),
@@ -30,7 +32,7 @@ class CartScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    'Total: ₹${cart.total.toStringAsFixed(0)}',
+                    'Total: ₹${cart.total.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
