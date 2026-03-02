@@ -3,32 +3,30 @@ import '../services/cart_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final CartService cart;
+  final VoidCallback onCartTap;
 
-  const HomeScreen({super.key, required this.cart});
+  const HomeScreen({
+    super.key,
+    required this.cart,
+    required this.onCartTap,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget productCard({
-    required String name,
-    required String image,
-    required double price,
-  }) {
+  Widget productCard(
+      String name, String imagePath, double price) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xffe9e4ec),
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6)
-        ],
       ),
       child: Column(
         children: [
-          Image.asset(image, height: 100),
+          Image.asset(imagePath, height: 120),
           const SizedBox(height: 10),
           Text(
             name,
@@ -41,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             "₹${price.toStringAsFixed(0)}",
             style: const TextStyle(
-              fontSize: 18,
               color: Colors.green,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -53,8 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 widget.cart.addItem(name, price);
               });
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.purple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
             child: const Text("Add"),
-          )
+          ),
         ],
       ),
     );
@@ -85,21 +90,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.shopping_cart, color: Colors.black),
-                onPressed: () {},
+                icon: const Icon(Icons.shopping_cart,
+                    color: Colors.black),
+                onPressed: widget.onCartTap,
               ),
               if (cartCount > 0)
                 Positioned(
                   right: 6,
                   top: 6,
-                  child: CircleAvatar(
-                    radius: 8,
-                    backgroundColor: Colors.red,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
                     child: Text(
                       cartCount.toString(),
                       style: const TextStyle(
-                        fontSize: 10,
                         color: Colors.white,
+                        fontSize: 10,
                       ),
                     ),
                   ),
@@ -108,21 +117,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(12),
-        children: [
-          productCard(
-            name: "Cow Milk",
-            image: "assets/images/cow_milk.png",
-            price: 90,
-          ),
-          productCard(
-            name: "Buffalo Milk",
-            image: "assets/images/buffalo_milk.png",
-            price: 130,
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: productCard(
+                "Cow Milk",
+                "assets/images/cow_milk.png",
+                90,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: productCard(
+                "Buffalo Milk",
+                "assets/images/buffalo_milk.png",
+                130,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
