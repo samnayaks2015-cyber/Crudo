@@ -12,9 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late CartService cart;
-
-  final List<Map<String, dynamic>> products = [
+  List<Map<String, dynamic>> products = [
     {
       'name': 'Cow Milk',
       'price': 90.0,
@@ -27,78 +25,29 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    cart = widget.cart;
-  }
-
   void addToCart(Map<String, dynamic> product) {
-    cart.addItem(product['name'], product['price']);
-    setState(() {});
-  }
+    setState(() {
+      widget.cart.addItem(product['name'], product['price']);
+    });
 
-  Widget productCard(Map<String, dynamic> product) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 10,
-            color: Colors.black12,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Image.asset(product['image'], height: 90),
-          const SizedBox(height: 10),
-          Text(
-            product['name'],
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '₹${product['price']}',
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () => addToCart(product),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple.shade100,
-              foregroundColor: Colors.deepPurple,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-            child: const Text('Add'),
-          ),
-        ],
-      ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Added to cart')),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff3eef6),
+      backgroundColor: const Color(0xfff6f6f6),
       appBar: AppBar(
-        backgroundColor: const Color(0xfff3eef6),
+        backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
           'CRUDO',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           Stack(
@@ -109,23 +58,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => CartScreen(cart: cart),
+                      builder: (_) => CartScreen(cart: widget.cart),
                     ),
                   ).then((_) => setState(() {}));
                 },
               ),
-              if (cart.totalItems > 0)
+              if (widget.cart.totalItems > 0)
                 Positioned(
                   right: 6,
                   top: 6,
                   child: Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.green,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      cart.totalItems.toString(),
+                      widget.cart.totalItems.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -148,7 +97,63 @@ class _HomeScreenState extends State<HomeScreen> {
             childAspectRatio: 0.75,
           ),
           itemBuilder: (context, index) {
-            return productCard(products[index]);
+            final product = products[index];
+
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    product['image'],
+                    height: 90,
+                    fit: BoxFit.contain,
+                  ),
+                  Text(
+                    product['name'],
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '₹${product['price']}',
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => addToCart(product),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.deepPurple,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          side: const BorderSide(color: Colors.deepPurple),
+                        ),
+                      ),
+                      child: const Text('Add'),
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),
