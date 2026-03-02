@@ -4,6 +4,7 @@ import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final CartService cart;
+
   const HomeScreen({super.key, required this.cart});
 
   @override
@@ -11,8 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
   final List<Map<String, dynamic>> products = [
     {
       'name': 'Cow Milk',
@@ -26,162 +25,172 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  void _addToCart(Map<String, dynamic> product) {
-    widget.cart.addItem(
-      name: product['name'],
-      price: product['price'],
-    );
-
-    setState(() {});
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Added to cart')),
-    );
-  }
-
-  void _onBottomTap(int index) {
-    setState(() => _selectedIndex = index);
-
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => CartScreen(cart: widget.cart),
-        ),
-      ).then((_) => setState(() {}));
-    }
-  }
-
-  Widget _productCard(Map<String, dynamic> product) {
-    return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Image.asset(
-            product['image'],
-            height: 90,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            product['name'],
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '₹${product['price']}',
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton(
-            onPressed: () => _addToCart(product),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.deepPurple,
-              side: const BorderSide(color: Colors.deepPurple),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-            ),
-            child: const Text('Add'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final cartCount = widget.cart.totalItems;
-
     return Scaffold(
       backgroundColor: const Color(0xfff5f5f5),
 
-      // ✅ NEW PREMIUM HEADER WITH LOGO
+      // ✅ TOP BAR WITH LOGO + CART
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        centerTitle: true,
-        title: Image.asset(
-          'assets/images/logo.png',
-          height: 36,
+        title: Row(
+          children: [
+            // 🔥 If logo not ready, comment next 4 lines
+            Image.asset(
+              'assets/images/logo.png',
+              height: 32,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'CRUDO',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart, color: Colors.black),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CartScreen(cart: widget.cart),
+                    ),
+                  ).then((_) => setState(() {}));
+                },
+              ),
+
+              // ✅ CART COUNT BADGE
+              if (widget.cart.totalItems > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      widget.cart.totalItems.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
 
-      // ✅ BODY
+      // ✅ PRODUCT GRID
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.all(12),
         child: GridView.builder(
           itemCount: products.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 0.78,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
           ),
           itemBuilder: (context, index) {
-            return _productCard(products[index]);
+            final product = products[index];
+
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    color: Colors.grey.withOpacity(0.15),
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // ✅ PRODUCT IMAGE
+                    Image.asset(
+                      product['image'],
+                      height: 90,
+                      fit: BoxFit.contain,
+                    ),
+
+                    // ✅ NAME
+                    Text(
+                      product['name'],
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    // ✅ PRICE
+                    Text(
+                      '₹${product['price']}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    // ✅ ADD BUTTON (FIXED)
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.deepPurple,
+                        side: const BorderSide(color: Colors.deepPurple),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        minimumSize: const Size(double.infinity, 45),
+                      ),
+                      onPressed: () {
+                        widget.cart.addItem(
+                          product['name'],
+                          product['price'],
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Added to cart'),
+                          ),
+                        );
+
+                        setState(() {});
+                      },
+                      child: const Text(
+                        'Add',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           },
         ),
       ),
 
-      // ✅ BOTTOM NAV WITH BADGE
+      // ✅ BOTTOM NAV (Country Delight style)
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onBottomTap,
+        currentIndex: 0,
         selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+        items: const [
           BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                const Icon(Icons.shopping_cart),
-                if (cartCount > 0)
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '$cartCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            label: 'Cart',
-          ),
-        ],
-      ),
-    );
-  }
-}
+            icon:
