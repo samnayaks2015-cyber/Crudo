@@ -11,25 +11,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.19.0
 
-      - name: Enable platforms (FIX)
-        run: flutter config --enable-android
-
-      - name: Create Flutter project structure
-        run: flutter create .
-
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Create fresh Flutter project
+        run: |
+          flutter create temp_app
+          cp -r lib temp_app/
+          cp pubspec.yaml temp_app/
+          cp -r assets temp_app/
 
       - name: Build release APK
-        run: flutter build apk --release
+        run: |
+          cd temp_app
+          flutter pub get
+          flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: temp_app/build/app/outputs/flutter-apk/app-release.apk
