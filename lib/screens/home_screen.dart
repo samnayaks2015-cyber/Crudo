@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
+import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,70 +10,77 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final CartService cartService = CartService();
+  final CartService cart = CartService();
+
+  void addToCart(String name, double price) {
+    setState(() {
+      cart.addItem(name, price);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cartCount = cartService.items.length;
-
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 32,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'CRUDO',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
+        title: const Text(
+          "CRUDO",
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
           Stack(
             children: [
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CartScreen(),
+                    ),
+                  ).then((_) => setState(() {}));
+                },
               ),
-              if (cartCount > 0)
+              if (cart.cartCount > 0)
                 Positioned(
                   right: 6,
                   top: 6,
-                  child: CircleAvatar(
-                    radius: 8,
-                    backgroundColor: Colors.red,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
                     child: Text(
-                      '$cartCount',
+                      cart.cartCount.toString(),
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: 12,
                       ),
                     ),
                   ),
                 ),
             ],
-          ),
+          )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+        child: Row(
           children: [
-            _productCard(
-              name: "Cow Milk",
-              price: 90,
-              image: 'assets/images/cow_milk.png',
+            Expanded(
+              child: milkCard(
+                "Cow Milk",
+                90,
+                "assets/images/cow_milk.png",
+              ),
             ),
-            _productCard(
-              name: "Buffalo Milk",
-              price: 130,
-              image: 'assets/images/buffalo_milk.png',
+            const SizedBox(width: 16),
+            Expanded(
+              child: milkCard(
+                "Buffalo Milk",
+                130,
+                "assets/images/buffalo_milk.png",
+              ),
             ),
           ],
         ),
@@ -80,52 +88,40 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _productCard({
-    required String name,
-    required double price,
-    required String image,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 6,
-            color: Colors.black12,
-          ),
-        ],
+  Widget milkCard(String name, double price, String imagePath) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(image, height: 70),
-          const SizedBox(height: 10),
-          Text(
-            name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(imagePath, height: 80),
+            const SizedBox(height: 10),
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '₹$price',
-            style: const TextStyle(
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
+            Text(
+              "₹${price.toStringAsFixed(0)}",
+              style: const TextStyle(
+                color: Colors.green,
+                fontSize: 16,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              cartService.addItem(name, price);
-              setState(() {});
-            },
-            child: const Text("Add"),
-          ),
-        ],
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => addToCart(name, price),
+              child: const Text("Add"),
+            )
+          ],
+        ),
       ),
     );
   }
