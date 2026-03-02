@@ -24,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 32,
             ),
             const SizedBox(width: 8),
-            const Text('CRUDO'),
+            const Text(
+              'CRUDO',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         actions: [
@@ -61,12 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
           children: [
-            productCard(
+            _productCard(
               name: "Cow Milk",
               price: 90,
               image: 'assets/images/cow_milk.png',
             ),
-            productCard(
+            _productCard(
               name: "Buffalo Milk",
               price: 130,
               image: 'assets/images/buffalo_milk.png',
@@ -77,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget productCard({
+  Widget _productCard({
     required String name,
     required double price,
     required String image,
