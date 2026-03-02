@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> products = [
+  final List<Map<String, dynamic>> products = [
     {
       'name': 'Cow Milk',
       'price': 90.0,
@@ -27,7 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void addToCart(Map<String, dynamic> product) {
     setState(() {
-      widget.cart.addItem(product['name'], product['price']);
+      widget.cart.addItem(
+        name: product['name'],
+        price: product['price'],
+      );
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -37,8 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartCount = widget.cart.totalItems;
+
     return Scaffold(
-      backgroundColor: const Color(0xfff6f6f6),
+      backgroundColor: const Color(0xFFF6F7FB),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -47,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
+            letterSpacing: 1,
           ),
         ),
         actions: [
@@ -63,27 +69,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   ).then((_) => setState(() {}));
                 },
               ),
-              if (widget.cart.totalItems > 0)
+              if (cartCount > 0)
                 Positioned(
                   right: 6,
                   top: 6,
                   child: Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(6),
                     decoration: const BoxDecoration(
-                      color: Colors.green,
+                      color: Color(0xFF2E7D32),
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      widget.cart.totalItems.toString(),
+                      cartCount.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
             ],
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Padding(
@@ -94,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisCount: 2,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.78,
           ),
           itemBuilder: (context, index) {
             final product = products[index];
@@ -102,56 +110,71 @@ class _HomeScreenState extends State<HomeScreen> {
             return Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.grey.withOpacity(0.12),
+                    blurRadius: 14,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    product['image'],
-                    height: 90,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(
-                    product['name'],
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 16,
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        product['image'],
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '₹${product['price']}',
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 10),
+                    Text(
+                      product['name'],
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => addToCart(product),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.deepPurple,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          side: const BorderSide(color: Colors.deepPurple),
+                    const SizedBox(height: 6),
+                    Text(
+                      '₹${product['price']}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF2E7D32),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 44,
+                      child: OutlinedButton(
+                        onPressed: () => addToCart(product),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Color(0xFF6A1B9A),
+                            width: 1.5,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: const Text(
+                          'Add',
+                          style: TextStyle(
+                            color: Color(0xFF6A1B9A),
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                      child: const Text('Add'),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
