@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'screens/cart_screen.dart';
-import 'screens/splash_screen.dart';
 import 'services/cart_service.dart';
 
 void main() {
@@ -16,8 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CRUDO',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: const SplashScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: const MainNavigation(),
     );
   }
 }
@@ -33,10 +34,19 @@ class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
   final CartService cart = CartService();
 
+  void goToCart() {
+    setState(() {
+      _selectedIndex = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screens = [
-      HomeScreen(cart: cart),
+      HomeScreen(
+        cart: cart,
+        onCartTap: goToCart,
+      ),
       CartScreen(cart: cart),
     ];
 
