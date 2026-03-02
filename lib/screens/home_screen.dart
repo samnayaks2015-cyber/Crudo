@@ -2,43 +2,55 @@ import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  final CartService cart;
-  final VoidCallback onCartTap;
-
-  const HomeScreen({
-    super.key,
-    required this.cart,
-    required this.onCartTap,
-  });
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget productCard(String name, String imagePath, double price) {
+  final CartService cart = CartService();
+
+  void addToCart(String name, double price) {
+    setState(() {
+      cart.addItem(name, price);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("$name added to cart"),
+        duration: const Duration(milliseconds: 800),
+      ),
+    );
+  }
+
+  Widget milkCard({
+    required String name,
+    required String image,
+    required double price,
+  }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
+        color: const Color(0xFFEDE7F6),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
           BoxShadow(
-            blurRadius: 8,
-            color: Colors.black12,
-            offset: Offset(0, 4),
-          )
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // ⭐ IMPORTANT FIX
         children: [
-          Image.asset(imagePath, height: 120),
-          const SizedBox(height: 10),
+          Image.asset(image, height: 120),
+          const SizedBox(height: 12),
           Text(
             name,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -46,23 +58,19 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             "₹${price.toStringAsFixed(0)}",
             style: const TextStyle(
+              fontSize: 20,
               color: Colors.green,
-              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                widget.cart.addItem(name, price);
-              });
-            },
+            onPressed: () => addToCart(name, price),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xFFE0E0E0),
               foregroundColor: Colors.purple,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(30),
               ),
             ),
             child: const Text("Add"),
@@ -74,75 +82,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cartCount = widget.cart.cartCount;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         title: Row(
           children: [
-            Image.asset('assets/images/logo.png', height: 32),
+            Image.asset(
+              'assets/images/logo.png',
+              height: 36,
+            ),
             const SizedBox(width: 8),
             const Text(
-              "CRUDO",
-              style: TextStyle(color: Colors.black),
+              'CRUDO',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon:
-                    const Icon(Icons.shopping_cart, color: Colors.black),
-                onPressed: widget.onCartTap,
-              ),
-              if (cartCount > 0)
-                Positioned(
-                  right: 6,
-                  top: 6,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      cartCount.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+      ),
+      backgroundColor: const Color(0xFFF6F6F6),
+      body: GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: 0.72,
+        children: [
+          milkCard(
+            name: "Cow Milk",
+            image: "assets/images/cow_milk.png",
+            price: 90,
+          ),
+          milkCard(
+            name: "Buffalo Milk",
+            image: "assets/images/buffalo_milk.png",
+            price: 130,
           ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start, // ⭐ FIX
-          children: [
-            Expanded(
-              child: productCard(
-                "Cow Milk",
-                "assets/images/cow_milk.png",
-                90,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: productCard(
-                "Buffalo Milk",
-                "assets/images/buffalo_milk.png",
-                130,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
