@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CartItem {
   final String name;
   final double price;
@@ -12,23 +10,38 @@ class CartItem {
   });
 }
 
-class CartService extends ChangeNotifier {
+class CartService {
+  // 🔹 singleton (IMPORTANT)
+  static final CartService _instance = CartService._internal();
+
+  factory CartService() {
+    return _instance;
+  }
+
+  CartService._internal();
+
+  // 🔹 cart storage
   final List<CartItem> _items = [];
 
+  // ✅ getter for items
   List<CartItem> get items => _items;
 
-  // ✅ TOTAL ITEMS COUNT
-  int get totalItems =>
-      _items.fold(0, (sum, item) => sum + item.quantity);
+  // ✅ REQUIRED — fixes your red error
+  int get cartCount => _items.fold(
+        0,
+        (sum, item) => sum + item.quantity,
+      );
 
-  // ✅ TOTAL PRICE
-  double get totalPrice =>
-      _items.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  // ✅ total price
+  double get totalPrice => _items.fold(
+        0,
+        (sum, item) => sum + (item.price * item.quantity),
+      );
 
-  // 🔥 IMPORTANT: THIS IS THE METHOD HOME SCREEN NEEDS
+  // ✅ add item
   void addItem(String name, double price) {
     try {
-      final index = _items.indexWhere((item) => item.name == name);
+      final index = _items.indexWhere((e) => e.name == name);
 
       if (index != -1) {
         _items[index].quantity++;
@@ -37,22 +50,18 @@ class CartService extends ChangeNotifier {
           CartItem(name: name, price: price),
         );
       }
-
-      notifyListeners();
     } catch (e) {
-      debugPrint('Cart addItem error: $e');
+      // safety
     }
   }
 
-  // ✅ REMOVE ITEM
+  // ✅ remove item
   void removeItem(String name) {
-    _items.removeWhere((item) => item.name == name);
-    notifyListeners();
+    _items.removeWhere((e) => e.name == name);
   }
 
-  // ✅ CLEAR CART
+  // ✅ clear cart
   void clearCart() {
     _items.clear();
-    notifyListeners();
   }
 }
