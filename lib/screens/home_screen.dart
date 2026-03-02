@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             },
-          ),
+          )
         ],
       ),
       body: Padding(
@@ -45,9 +45,9 @@ class HomeScreen extends StatelessWidget {
           itemCount: products.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            childAspectRatio: 0.8,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75,
           ),
           itemBuilder: (context, index) {
             final product = products[index];
@@ -58,35 +58,31 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: const [
                   BoxShadow(
-                    blurRadius: 10,
+                    blurRadius: 8,
                     color: Colors.black12,
-                  ),
+                  )
                 ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    product['image'] as String,
-                    height: 80,
-                  ),
-                  const SizedBox(height: 12),
+                  Image.asset(product['image'] as String, height: 80),
+                  const SizedBox(height: 10),
                   Text(
                     product['name'] as String,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 6),
                   Text(
                     '₹${product['price']}',
                     style: const TextStyle(
-                      fontSize: 16,
                       color: Colors.green,
+                      fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
                       cart.addItem(
@@ -99,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                     child: const Text('Add'),
-                  ),
+                  )
                 ],
               ),
             );
