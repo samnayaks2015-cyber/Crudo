@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Java
@@ -22,21 +22,21 @@ jobs:
         with:
           flutter-version: 3.19.0
 
-      - name: Create fresh Flutter project
+      - name: Create fresh project
         run: |
-          flutter create temp_app
-          cp -r lib temp_app/
-          cp pubspec.yaml temp_app/
-          cp -r assets temp_app/
+          flutter create app
+          cp -r lib app/
+          cp pubspec.yaml app/
+          cp -r assets app/
 
-      - name: Build release APK
+      - name: Build APK
         run: |
-          cd temp_app
+          cd app
           flutter pub get
           flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: temp_app/build/app/outputs/flutter-apk/app-release.apk
+          name: crudo-apk
+          path: app/build/app/outputs/flutter-apk/app-release.apk
