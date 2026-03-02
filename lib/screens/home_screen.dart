@@ -116,20 +116,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfff5f5f5),
 
-      // ✅ CLEAN APP BAR (no duplicate cart)
+      // ✅ NEW PREMIUM HEADER WITH LOGO
       appBar: AppBar(
-        title: const Text(
-          'CRUDO',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: true,
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 36,
+        ),
       ),
 
-      // ✅ PRODUCT GRID
+      // ✅ BODY
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: GridView.builder(
@@ -144,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      // ✅ COUNTRY DELIGHT STYLE BOTTOM NAV
+      // ✅ BOTTOM NAV WITH BADGE
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onBottomTap,
