@@ -1,11 +1,7 @@
 class Product {
   final String name;
-  final double price;
-  final String category;
+  final int price;
+  final String image;
 
-  Product({
-    required this.name,
-    required this.price,
-    required this.category,
-  });
+  Product(this.name, this.price, this.image);
 }
