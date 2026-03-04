@@ -1,35 +1,38 @@
+import '../models/cart_item.dart';
+import '../models/product.dart';
+
 class CartService {
-  final List<Map<String, dynamic>> _items = [];
 
-  List<Map<String, dynamic>> get items => _items;
+  static final CartService instance = CartService._internal();
+  CartService._internal();
 
-  int get cartCount => _items.fold(0, (sum, item) => sum + (item['quantity'] as int));
+  final List<CartItem> items = [];
 
-  double get totalPrice => _items.fold(
-        0,
-        (sum, item) =>
-            sum + ((item['price'] as double) * (item['quantity'] as int)),
-      );
+  void add(Product product){
 
-  void addItem(String name, double price) {
-    final index = _items.indexWhere((item) => item['name'] == name);
+    final index = items.indexWhere((i) => i.product.name == product.name);
 
-    if (index >= 0) {
-      _items[index]['quantity'] += 1;
+    if(index >= 0){
+      items[index].quantity++;
     } else {
-      _items.add({
-        'name': name,
-        'price': price,
-        'quantity': 1,
-      });
+      items.add(CartItem(product,1));
     }
+
   }
 
-  void removeItem(String name) {
-    _items.removeWhere((item) => item['name'] == name);
+  void remove(CartItem item){
+    items.remove(item);
   }
 
-  void clearCart() {
-    _items.clear();
+  int get total {
+
+    int t = 0;
+
+    for(var i in items){
+      t += i.product.price * i.quantity;
+    }
+
+    return t;
   }
+
 }
