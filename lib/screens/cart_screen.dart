@@ -1,48 +1,77 @@
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
+import 'checkout_screen.dart';
 
-class CartScreen extends StatelessWidget {
-  final CartService cart;
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
-  const CartScreen({super.key, required this.cart});
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+
+  final cart = CartService.instance;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("My Cart")),
-      body: cart.items.isEmpty
-          ? const Center(child: Text("Cart is empty"))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: cart.items.length,
-                    itemBuilder: (context, index) {
-                      final item = cart.items[index];
 
-                      return ListTile(
-                        title: Text(item['name']),
-                        subtitle:
-                            Text("Qty: ${item['quantity']}"),
-                        trailing: Text(
-                          "₹${(item['price'] * item['quantity']).toStringAsFixed(0)}",
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    "Total: ₹${cart.totalPrice.toStringAsFixed(0)}",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+    return Scaffold(
+
+      appBar: AppBar(title: const Text("Cart")),
+
+      body: Column(
+
+        children: [
+
+          Expanded(
+
+            child: ListView.builder(
+
+              itemCount: cart.items.length,
+
+              itemBuilder:(context,index){
+
+                final item = cart.items[index];
+
+                return ListTile(
+
+                  leading: Image.asset(item.product.image,width:40),
+
+                  title: Text(item.product.name),
+
+                  subtitle: Text("₹${item.product.price} x ${item.quantity}"),
+
+                );
+
+              }
+
             ),
+
+          ),
+
+          Text("Total ₹${cart.total}",style: const TextStyle(fontSize:20)),
+
+          ElevatedButton(
+
+            onPressed: (){
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CheckoutScreen())
+              );
+
+            },
+
+            child: const Text("Checkout"),
+
+          )
+
+        ],
+
+      ),
+
     );
+
   }
 }
