@@ -2,60 +2,47 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/cart_service.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends StatelessWidget {
 
   final Product product;
 
-  const ProductCard({super.key,required this.product});
-
-  @override
-  State<ProductCard> createState() => _ProductCardState();
-}
-
-class _ProductCardState extends State<ProductCard> {
-
-  final cart = CartService.instance;
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-      ),
-
-      padding: const EdgeInsets.all(12),
+    return Card(
 
       child: Column(
 
         children: [
 
-          Expanded(child: Image.asset(widget.product.image)),
+          Image.asset(product.image,height:80),
 
-          Text(widget.product.name,
-          style: const TextStyle(fontSize:18,fontWeight:FontWeight.bold)),
+          const SizedBox(height:10),
 
-          Text("₹${widget.product.price}",
-          style: const TextStyle(fontSize:18,color:Colors.green)),
+          Text(product.name),
+
+          Text(
+            "₹${product.price}",
+            style: const TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.bold
+            ),
+          ),
 
           ElevatedButton(
+
             onPressed: (){
-
-              setState(() {
-                cart.add(widget.product);
-              });
-
+              CartService.add(product);
             },
+
             child: const Text("Add"),
+
           )
 
         ],
-
       ),
-
     );
-
   }
 }
