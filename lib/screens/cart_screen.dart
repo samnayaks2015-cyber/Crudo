@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/cart_service.dart';
-import 'checkout_screen.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-
-  final cart = CartService.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -20,58 +11,26 @@ class _CartScreenState extends State<CartScreen> {
 
       appBar: AppBar(title: const Text("Cart")),
 
-      body: Column(
+      body: ListView.builder(
 
-        children: [
+        itemCount: CartService.cartItems.length,
 
-          Expanded(
+        itemBuilder: (context,index){
 
-            child: ListView.builder(
+          final item = CartService.cartItems[index];
 
-              itemCount: cart.items.length,
+          return ListTile(
 
-              itemBuilder:(context,index){
+            leading: Image.asset(item.image,width:50),
 
-                final item = cart.items[index];
+            title: Text(item.name),
 
-                return ListTile(
+            trailing: Text("₹${item.price}"),
 
-                  leading: Image.asset(item.product.image,width:40),
-
-                  title: Text(item.product.name),
-
-                  subtitle: Text("₹${item.product.price} x ${item.quantity}"),
-
-                );
-
-              }
-
-            ),
-
-          ),
-
-          Text("Total ₹${cart.total}",style: const TextStyle(fontSize:20)),
-
-          ElevatedButton(
-
-            onPressed: (){
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CheckoutScreen())
-              );
-
-            },
-
-            child: const Text("Checkout"),
-
-          )
-
-        ],
-
+          );
+        },
       ),
 
     );
-
   }
 }
