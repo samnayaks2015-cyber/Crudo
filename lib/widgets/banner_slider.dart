@@ -1,38 +1,81 @@
 import 'package:flutter/material.dart';
 
-class BannerSlider extends StatelessWidget {
-
+class BannerSlider extends StatefulWidget {
   const BannerSlider({super.key});
+
+  @override
+  State<BannerSlider> createState() => _BannerSliderState();
+}
+
+class _BannerSliderState extends State<BannerSlider> {
+
+  final List<String> banners = [
+    "assets/images/banner1.png",
+    "assets/images/banner2.png",
+    "assets/images/banner3.png",
+  ];
+
+  int currentIndex = 0;
+  final PageController controller = PageController();
 
   @override
   Widget build(BuildContext context) {
 
-    return SizedBox(
-      height: 160,
-      child: PageView(
-        children: [
+    return Column(
+      children: [
 
-          _banner("assets/images/banner1.jpg"),
-          _banner("assets/images/banner2.jpg"),
-          _banner("assets/images/banner3.jpg"),
+        SizedBox(
+          height: 170,
+          child: PageView.builder(
+            controller: controller,
+            itemCount: banners.length,
+            onPageChanged: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
 
-        ],
-      ),
-    );
-  }
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
 
-  Widget _banner(String image){
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal:12),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Image.asset(
-          image,
-          fit: BoxFit.cover,
+                  child: Image.asset(
+                    banners[index],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
-      ),
+
+        const SizedBox(height: 6),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            banners.length,
+            (index) => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: currentIndex == index ? 10 : 6,
+              height: currentIndex == index ? 10 : 6,
+              decoration: BoxDecoration(
+                color: currentIndex == index
+                    ? Colors.green
+                    : Colors.grey,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
-
 }
