@@ -13,14 +13,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
-
-  # Banner slider
   carousel_slider: ^4.2.1
-
-  # Page indicator dots
   smooth_page_indicator: ^1.1.0
-
-  # Fonts
   google_fonts: ^6.1.0
 
 dev_dependencies:
@@ -34,6 +28,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/logo.png
+    - assets/images/splash.png
     - assets/images/banner1.png
     - assets/images/banner2.png
     - assets/images/banner3.png
@@ -42,5 +38,3 @@ flutter:
     - assets/images/fruits.png
     - assets/images/vegetables.png
     - assets/images/dairy.png
-    - assets/images/crudo_logo.png
-    - assets/images/crudo_splash.png
