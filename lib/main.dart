@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'screens/splash_screen.dart';
+import 'home_screen.dart';
 
 void main() {
-  runApp(const CrudoApp());
+  runApp(const MyApp());
 }
 
-class CrudoApp extends StatelessWidget {
-  const CrudoApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "CRUDO",
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const SplashScreen(),
+      home: HomeScreen(),
     );
   }
 }
