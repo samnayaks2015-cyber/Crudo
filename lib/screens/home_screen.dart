@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'cart_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-  final List<String> banners = [
+  final List<String> banners = const [
     "assets/images/banner1.png",
     "assets/images/banner2.png",
-    "assets/images/banner3.png",
+    "assets/images/banner3.png"
   ];
 
-  final List<Map<String, String>> categories = [
+  final List<Map<String, String>> categories = const [
     {
       "name": "Milk",
       "image": "assets/images/milk.png",
@@ -32,13 +33,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.grey[100],
 
+      /// APP BAR
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(110),
         child: Container(
-          padding: const EdgeInsets.only(top: 40,left: 16,right: 16),
+          padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xff8E2DE2), Color(0xff4A00E0)],
@@ -81,47 +82,52 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
+      /// BODY
       body: SingleChildScrollView(
         child: Column(
           children: [
 
             const SizedBox(height: 15),
 
-            // Banner slider
+            /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
-                height: 170,
+                height: 180,
                 autoPlay: true,
                 enlargeCenterPage: true,
               ),
               items: banners.map((item) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(item, fit: BoxFit.cover),
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.asset(
+                      item,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 );
               }).toList(),
             ),
 
             const SizedBox(height: 20),
 
-            // Offer cards
+            /// OFFERS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
                   offerCard("60% OFF"),
                   offerCard("₹200 OFF"),
                   offerCard("FAST DELIVERY"),
-
                 ],
               ),
             ),
 
             const SizedBox(height: 25),
 
-            // Category title
+            /// CATEGORY TITLE
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Align(
@@ -137,7 +143,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // Category grid
+            /// CATEGORY GRID
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
@@ -149,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 1.2),
+                    childAspectRatio: 1.1),
                 itemBuilder: (context, index) {
 
                   var category = categories[index];
@@ -171,7 +177,7 @@ class HomeScreen extends StatelessWidget {
 
                         Image.asset(
                           category["image"]!,
-                          height: 90,
+                          height: 80,
                         ),
 
                         const SizedBox(height: 10),
@@ -196,12 +202,21 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
+      /// CART BUTTON
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         child: const Icon(Icons.shopping_cart),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CartScreen(),
+            ),
+          );
+        },
       ),
 
+      /// BOTTOM NAVIGATION
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
@@ -233,19 +248,21 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget offerCard(String text) {
-    return Container(
-      height: 80,
-      width: 100,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
+    return Expanded(
+      child: Container(
+        height: 80,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+          color: Colors.orange,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
