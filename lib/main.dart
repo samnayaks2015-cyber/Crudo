@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const CrudoApp());
@@ -10,13 +10,9 @@ class CrudoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CRUDO',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
