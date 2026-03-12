@@ -8,26 +8,14 @@ class HomeScreen extends StatelessWidget {
   final List<String> banners = const [
     "assets/images/banner1.png",
     "assets/images/banner2.png",
-    "assets/images/banner3.png"
+    "assets/images/banner3.png",
   ];
 
   final List<Map<String, String>> categories = const [
-    {
-      "name": "Milk",
-      "image": "assets/images/milk.png",
-    },
-    {
-      "name": "Fruits",
-      "image": "assets/images/fruits.png",
-    },
-    {
-      "name": "Vegetables",
-      "image": "assets/images/vegetables.png",
-    },
-    {
-      "name": "Dairy",
-      "image": "assets/images/dairy.png",
-    },
+    {"name": "Milk", "image": "assets/images/milk.png"},
+    {"name": "Fruits", "image": "assets/images/fruits.png"},
+    {"name": "Vegetables", "image": "assets/images/vegetables.png"},
+    {"name": "Dairy", "image": "assets/images/dairy.png"},
   ];
 
   @override
@@ -35,7 +23,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
 
-      /// APP BAR
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(110),
         child: Container(
@@ -82,30 +69,26 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      /// BODY
       body: SingleChildScrollView(
         child: Column(
           children: [
 
             const SizedBox(height: 15),
 
-            /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
                 height: 180,
+                viewportFraction: 0.95,
                 autoPlay: true,
                 enlargeCenterPage: true,
               ),
               items: banners.map((item) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      item,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    item,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                   ),
                 );
               }).toList(),
@@ -113,7 +96,6 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// OFFERS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -127,7 +109,6 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            /// CATEGORY TITLE
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Align(
@@ -143,7 +124,6 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            /// CATEGORY GRID
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
@@ -202,7 +182,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      /// CART BUTTON
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         child: const Icon(Icons.shopping_cart),
@@ -216,7 +195,6 @@ class HomeScreen extends StatelessWidget {
         },
       ),
 
-      /// BOTTOM NAVIGATION
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
@@ -228,8 +206,8 @@ class HomeScreen extends StatelessWidget {
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: "Categories",
+            icon: Icon(Icons.subscriptions),
+            label: "Subscription",
           ),
 
           BottomNavigationBarItem(
