@@ -40,7 +40,6 @@ class LoginScreen extends StatelessWidget {
                 backgroundColor: Colors.green,
                 minimumSize: const Size(double.infinity, 50),
               ),
-
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -49,9 +48,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                 );
               },
-
               child: const Text("Login"),
             )
+
           ],
         ),
       ),
