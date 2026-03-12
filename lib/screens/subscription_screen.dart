@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SubscriptionScreen extends StatelessWidget {
+
   const SubscriptionScreen({super.key});
 
   @override
@@ -10,48 +11,35 @@ class SubscriptionScreen extends StatelessWidget {
 
       appBar: AppBar(
         title: const Text("Milk Subscription"),
-        backgroundColor: Colors.green,
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(16),
-
+        padding: const EdgeInsets.all(20),
         child: Column(
+
           children: [
 
-            subscriptionCard("Cow Milk","₹90 / day"),
-            subscriptionCard("Buffalo Milk","₹120 / day"),
+            const Text(
+              "Daily Milk Delivery",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height:20),
+
+            const Text("Subscribe for fresh milk every morning"),
+
+            const SizedBox(height:30),
+
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Subscribe Now"),
+            ),
 
           ],
         ),
-      ),
-    );
-  }
-
-  Widget subscriptionCard(String name,String price){
-
-    return Card(
-
-      margin: const EdgeInsets.only(bottom:15),
-
-      child: ListTile(
-
-        leading: const CircleAvatar(
-          backgroundColor: Colors.green,
-        ),
-
-        title: Text(name),
-
-        subtitle: Text(price),
-
-        trailing: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-          ),
-          onPressed: () {},
-          child: const Text("Subscribe"),
-        ),
-
       ),
     );
   }
