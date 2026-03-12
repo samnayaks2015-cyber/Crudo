@@ -1,27 +1,36 @@
-name: crudo
-description: CRUDO delivery app
-
+name: crudo_app
+description: CRUDO Milk, Fruits & Vegetables Delivery App
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
   carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_lints: ^3.0.0
+
 flutter:
 
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/logo.png
+    - assets/images/splash.png
+    - assets/images/banner1.png
+    - assets/images/banner2.png
+    - assets/images/banner3.png
+    - assets/images/milk.png
+    - assets/images/fruits.png
+    - assets/images/vegetables.png
+    - assets/images/dairy.png
