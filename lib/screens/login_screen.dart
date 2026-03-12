@@ -8,42 +8,48 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Colors.white,
 
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(25),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
 
-            Image.asset("assets/images/logo.png",height:120),
+            Image.asset(
+              "assets/images/logo.png",
+              height: 100,
+            ),
 
-            const SizedBox(height:40),
+            const SizedBox(height: 40),
 
             TextField(
               decoration: InputDecoration(
-                labelText: "Phone Number",
+                hintText: "Enter Mobile Number",
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
 
-            const SizedBox(height:20),
+            const SizedBox(height: 20),
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity,50),
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
               ),
-              onPressed: (){
+
+              onPressed: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const HomeScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                 );
               },
+
               child: const Text("Login"),
             )
           ],
