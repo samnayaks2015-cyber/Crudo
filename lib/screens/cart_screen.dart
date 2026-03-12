@@ -8,13 +8,9 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cart"),
-        backgroundColor: Colors.green,
       ),
       body: const Center(
-        child: Text(
-          "Your Cart is Empty",
-          style: TextStyle(fontSize: 20),
-        ),
+        child: Text("Your cart is empty"),
       ),
     );
   }
