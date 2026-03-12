@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'cart_screen.dart';
+import 'category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
 
@@ -32,6 +34,7 @@ class HomeScreen extends StatelessWidget {
               colors: [Color(0xff8E2DE2), Color(0xff4A00E0)],
             ),
           ),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -75,12 +78,12 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            /// BANNERS
             CarouselSlider(
               options: CarouselOptions(
                 height: 180,
-                viewportFraction: 0.95,
+                viewportFraction: 1,
                 autoPlay: true,
-                enlargeCenterPage: true,
               ),
               items: banners.map((item) {
                 return ClipRRect(
@@ -96,6 +99,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
+            /// OFFERS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -124,6 +128,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            /// CATEGORY GRID
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
@@ -136,40 +141,55 @@ class HomeScreen extends StatelessWidget {
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 10,
                     childAspectRatio: 1.1),
+
                 itemBuilder: (context, index) {
 
                   var category = categories[index];
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade300,
-                          blurRadius: 6,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-
-                        Image.asset(
-                          category["image"]!,
-                          height: 80,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoryScreen(
+                            categoryName: category["name"]!,
+                          ),
                         ),
+                      );
+                    },
 
-                        const SizedBox(height: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 6,
+                          )
+                        ],
+                      ),
 
-                        Text(
-                          category["name"]!,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        )
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
 
-                      ],
+                          Image.asset(
+                            category["image"]!,
+                            height: 80,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Text(
+                            category["name"]!,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          )
+
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -197,7 +217,6 @@ class HomeScreen extends StatelessWidget {
 
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
         items: const [
 
           BottomNavigationBarItem(
@@ -219,7 +238,6 @@ class HomeScreen extends StatelessWidget {
             icon: Icon(Icons.person),
             label: "Account",
           ),
-
         ],
       ),
     );
