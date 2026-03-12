@@ -10,9 +10,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int currentIndex = 0;
+  int cartCount = 0;
 
-  final List bannerImages = [
+  final List banners = [
     "assets/images/banner1.png",
   ];
 
@@ -23,230 +23,246 @@ class _HomeScreenState extends State<HomeScreen> {
     {"name": "Dairy", "image": "assets/images/dairy.png"},
   ];
 
+  final List products = [
+    {"name": "Cow Milk", "price": "₹60", "image": "assets/images/milk.png"},
+    {"name": "Buffalo Milk", "price": "₹70", "image": "assets/images/milk.png"},
+    {"name": "Apple", "price": "₹120", "image": "assets/images/fruits.png"},
+    {"name": "Banana", "price": "₹60", "image": "assets/images/fruits.png"},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      floatingActionButton: FloatingActionButton(
+      appBar: AppBar(
         backgroundColor: Colors.green,
-        child: const Icon(Icons.shopping_cart),
-        onPressed: () {
-          setState(() {
-            currentIndex = 2;
-          });
-        },
-      ),
+        title: const Text("CRUDO"),
+        actions: [
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.green,
-        onTap: (index){
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        items: const [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {},
+              ),
 
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home"),
+              Positioned(
+                right: 5,
+                top: 5,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    cartCount.toString(),
+                    style: const TextStyle(color: Colors.white,fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          )
 
-          BottomNavigationBarItem(
-              icon: Icon(Icons.subscriptions),
-              label: "Subscription"),
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: "Cart"),
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "Profile"),
         ],
       ),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-              /// HEADER
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff7B1FA2),
-                      Color(0xff9C27B0),
+            /// BANNER
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 180,
+                autoPlay: true,
+                viewportFraction: 0.95,
+                enlargeCenterPage: true,
+              ),
+              items: banners.map((image) {
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                      image: AssetImage(image),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+
+              }).toList(),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// CATEGORY TITLE
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                "Shop by Category",
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            /// CATEGORY GRID
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              itemCount: categories.length,
+              gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 1.2),
+
+              itemBuilder: (context,index){
+
+                var category = categories[index];
+
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade300,blurRadius: 5)
                     ],
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
 
-                    const Text(
-                      "Delivery to",
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
 
-                    const Text(
-                      "Bharathi",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                    ),
+                      Image.asset(category["image"],height:70),
 
-                    const SizedBox(height: 10),
+                      const SizedBox(height:10),
 
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(Icons.search),
-                            hintText: "Search milk, fruits..."),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              /// BANNER SLIDER
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 180,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                ),
-                items: bannerImages.map((image) {
-
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                            image: AssetImage(image),
-                            fit: BoxFit.cover)),
-                  );
-
-                }).toList(),
-              ),
-
-              const SizedBox(height: 20),
-
-              /// OFFERS
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    offerBox("60% OFF"),
-                    offerBox("₹200 OFF"),
-                    offerBox("FAST DELIVERY"),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              /// CATEGORY TITLE
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Shop by Category",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                      Text(
+                        category["name"],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
                   ),
-                ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 25),
+
+            /// PRODUCT TITLE
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                "Popular Products",
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
               ),
+            ),
 
-              const SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-              /// CATEGORY GRID
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: categories.length,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 15,
-                    childAspectRatio: 1.2),
-                itemBuilder: (context,index){
+            /// PRODUCT GRID
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              itemCount: products.length,
+              gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 0.8),
 
-                  var category = categories[index];
+              itemBuilder: (context,index){
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade200,
-                            blurRadius: 10)
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                var product = products[index];
 
-                        Image.asset(
-                          category["image"],
-                          height: 80,
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade300,blurRadius: 5)
+                    ],
+                  ),
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+
+                      Image.asset(product["image"],height:70),
+
+                      const SizedBox(height:10),
+
+                      Text(product["name"]),
+
+                      const SizedBox(height:5),
+
+                      Text(
+                        product["price"],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
 
-                        const SizedBox(height: 10),
+                      const SizedBox(height:10),
 
-                        Text(
-                          category["name"],
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                      ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+                            cartCount++;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                        child: const Text("Add"),
+                      )
 
-              const SizedBox(height: 40),
+                    ],
+                  ),
+                );
 
-            ],
+              },
+            ),
+
+            const SizedBox(height: 80)
+
+          ],
+        ),
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.green,
+        items: const [
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
           ),
-        ),
-      ),
-    );
-  }
 
-  Widget offerBox(String text){
-    return Container(
-      width: 100,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.repeat),
+            label: "Subscription",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Profile",
+          ),
+        ],
       ),
     );
   }
