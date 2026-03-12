@@ -15,17 +15,21 @@ class CrudoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CRUDO',
+
       theme: ThemeData(
         primarySwatch: Colors.green,
-        scaffoldBackgroundColor: Colors.white,
       ),
 
       initialRoute: '/',
 
       routes: {
+
         '/': (context) => const SplashScreen(),
+
         '/login': (context) => LoginScreen(),
+
         '/home': (context) => const HomeScreen(),
+
       },
     );
   }
