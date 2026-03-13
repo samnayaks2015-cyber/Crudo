@@ -10,18 +10,16 @@ build:
 runs-on: ubuntu-latest
 
 steps:
-  - uses: actions/checkout@v3
+  - name: Checkout repository
+    uses: actions/checkout@v3
 
-  - uses: subosito/flutter-action@v2
+  - name: Install Flutter
+    uses: subosito/flutter-action@v2
     with:
       flutter-version: '3.22.0'
 
-  - name: Install dependencies
+  - name: Get dependencies
     run: flutter pub get
-
-  - name: Force Android SDK 21
-    run: |
-      sed -i 's/minSdkVersion 19/minSdkVersion 21/g' android/app/build.gradle || true
 
   - name: Build APK
     run: flutter build apk --release
@@ -29,5 +27,5 @@ steps:
   - name: Upload APK
     uses: actions/upload-artifact@v4
     with:
-      name: app-release
+      name: release-apk
       path: build/app/outputs/flutter-apk/app-release.apk
