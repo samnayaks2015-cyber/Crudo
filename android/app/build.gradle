@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+id 'com.android.application'
+}
 
 android {
 namespace "com.example.crudo_app"
-compileSdkVersion 33
+compileSdk 33
 
 defaultConfig {
     applicationId "com.example.crudo_app"
-    minSdkVersion 21
-    targetSdkVersion 33
+    minSdk 21
+    targetSdk 33
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
@@ -16,14 +18,7 @@ defaultConfig {
 buildTypes {
     release {
         signingConfig signingConfigs.debug
-        minifyEnabled false
-        shrinkResources false
     }
-}
-
-compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
 }
 
 }
