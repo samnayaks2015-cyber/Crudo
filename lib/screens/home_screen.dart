@@ -16,23 +16,43 @@ class _HomeScreenState extends State<HomeScreen> {
   List cartItems = [];
 
   final List banners = [
-    "assets/images/banner.png",
-    "assets/images/banner.png"
+    "assets/images/banner1.png",
+    "assets/images/banner2.png",
+    "assets/images/banner3.png",
   ];
 
   final List categories = [
     {"name":"Milk","image":"assets/images/milk.png"},
     {"name":"Fruits","image":"assets/images/fruits.png"},
     {"name":"Vegetables","image":"assets/images/vegetables.png"},
-    {"name":"Dairy","image":"assets/images/dairy.png"}
+    {"name":"Dairy","image":"assets/images/dairy.png"},
   ];
 
   final List products = [
-    {"name":"Cow Milk","price":60,"image":"assets/images/milk.png"},
-    {"name":"Buffalo Milk","price":70,"image":"assets/images/milk.png"},
-    {"name":"Apple","price":120,"image":"assets/images/fruits.png"},
-    {"name":"Banana","price":50,"image":"assets/images/fruits.png"},
+    {"name":"Cow Milk","price":90,"image":"assets/images/milk.png"},
+    {"name":"Buffalo Milk","price":120,"image":"assets/images/milk.png"},
+    {"name":"Apple","price":140,"image":"assets/images/fruits.png"},
+    {"name":"Banana","price":60,"image":"assets/images/fruits.png"},
   ];
+
+  void addToCart(product){
+
+    setState(() {
+
+      cartItems.add({
+        "name":product["name"],
+        "price":product["price"],
+        "image":product["image"],
+        "qty":1
+      });
+
+      cartCount = cartItems.length;
+
+      total += product["price"];
+
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,48 +61,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text("CRUDO"),
+        title: Row(
+          children: [
+            Image.asset("assets/images/logo.png",height:30),
+            const SizedBox(width:10),
+            const Text("CRUDO"),
+          ],
+        ),
+
         actions: [
 
-          Stack(
-            children: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: (){
 
-              IconButton(
-                icon: const Icon(Icons.shopping_cart),
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context)=> CartScreen(
-                        cartItems: cartItems,
-                        total: total,
-                      ),
-                    ),
-                  );
-                },
-              ),
-
-              if(cartCount>0)
-              Positioned(
-                right:5,
-                top:5,
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    cartCount.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize:12,
-                    ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:(context)=>CartScreen(
+                    cartItems: cartItems,
+                    total: total,
                   ),
                 ),
-              )
+              );
 
-            ],
+            },
           )
 
         ],
@@ -101,9 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal:16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: "Search milk, fruits, vegetables",
+                  hintText:"Search milk, fruits, vegetables",
                   prefixIcon: const Icon(Icons.search),
-                  filled: true,
+                  filled:true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -115,10 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:20),
 
-            /// BANNER SLIDER
+            /// BANNERS
             CarouselSlider(
               options: CarouselOptions(
-                height:180,
+                height:170,
                 autoPlay:true,
                 viewportFraction:1,
               ),
@@ -169,11 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal:12),
+
                     child: Column(
+
                       children: [
 
                         Container(
                           padding: const EdgeInsets.all(12),
+
                           decoration: BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
@@ -184,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             ],
                           ),
+
                           child: Image.asset(
                             category["image"],
                             height:40,
@@ -204,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:20),
 
-            /// POPULAR PRODUCTS
+            /// PRODUCT TITLE
             const Padding(
               padding: EdgeInsets.symmetric(horizontal:16),
               child: Text(
@@ -221,7 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
             GridView.builder(
               shrinkWrap:true,
               physics: const NeverScrollableScrollPhysics(),
+
               padding: const EdgeInsets.symmetric(horizontal:16),
+
               itemCount: products.length,
 
               gridDelegate:
@@ -237,7 +246,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 var product = products[index];
 
                 return Container(
+
                   padding: const EdgeInsets.all(10),
+
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -250,6 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   child: Column(
+
                     children: [
 
                       Image.asset(product["image"],height:70),
@@ -270,21 +282,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Spacer(),
 
                       ElevatedButton(
+
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                         ),
+
                         onPressed: (){
-
-                          setState(() {
-
-                            cartItems.add(product);
-                            cartCount = cartItems.length;
-                            total += product["price"];
-
-                          });
-
+                          addToCart(product);
                         },
+
                         child: const Text("ADD"),
+
                       )
 
                     ],
@@ -294,12 +302,74 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            const SizedBox(height:80)
+            const SizedBox(height:100)
 
           ],
         ),
       ),
 
+      /// FLOATING CART BAR
+      bottomNavigationBar: cartCount > 0
+          ? GestureDetector(
+
+              onTap: (){
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:(context)=>CartScreen(
+                      cartItems: cartItems,
+                      total: total,
+                    ),
+                  ),
+                );
+
+              },
+
+              child: Container(
+
+                margin: const EdgeInsets.all(12),
+
+                padding: const EdgeInsets.symmetric(
+                  horizontal:20,
+                  vertical:15,
+                ),
+
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+
+                child: Row(
+
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: [
+
+                    Text(
+                      "$cartCount Items | ₹${total.toStringAsFixed(0)}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize:16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const Text(
+                      "VIEW CART",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+
+                  ],
+                ),
+              ),
+            )
+          : null,
+
     );
+
   }
 }
