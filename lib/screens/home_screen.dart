@@ -13,8 +13,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int cartCount = 0;
-  int navIndex = 0;
-
   List cartItems = [];
   double total = 0;
 
@@ -45,8 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey[100],
 
       appBar: AppBar(
-        title: const Text("CRUDO"),
         backgroundColor: Colors.green,
+        elevation: 0,
+        title: const Text("CRUDO"),
+
         actions: [
 
           Stack(
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CartScreen(
+                      builder: (context)=> CartScreen(
                         cartItems: cartItems,
                         total: total,
                       ),
@@ -71,10 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if(cartCount>0)
               Positioned(
-                right: 5,
-                top: 5,
+                right: 6,
+                top: 6,
                 child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,
@@ -101,8 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
+            const SizedBox(height:10),
+
+            /// LOCATION
             const Padding(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.symmetric(horizontal:16),
               child: Text(
                 "Deliver to Bharathi",
                 style: TextStyle(
@@ -112,8 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
+            const SizedBox(height:10),
+
+            /// SEARCH BAR
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal:12),
+              padding: const EdgeInsets.symmetric(horizontal:16),
               child: TextField(
                 decoration: InputDecoration(
                   hintText: "Search milk, fruits, vegetables...",
@@ -121,30 +127,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
             ),
 
-            const SizedBox(height:15),
+            const SizedBox(height:20),
 
+            /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
-                height:170,
-                viewportFraction:1,
-                autoPlay:true,
+                height: 170,
+                viewportFraction: 1,
+                autoPlay: true,
               ),
-              items: bannerImages.map((img) {
+              items: bannerImages.map((img){
 
                 return Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal:10),
+                  margin: const EdgeInsets.symmetric(horizontal:12),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     child: Image.asset(
                       img,
+                      width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -153,23 +160,25 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
 
-            const SizedBox(height:20),
+            const SizedBox(height:25),
 
+            /// CATEGORY TITLE
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal:12),
+              padding: EdgeInsets.symmetric(horizontal:16),
               child: Text(
                 "Categories",
                 style: TextStyle(
-                  fontSize:18,
+                  fontSize:20,
                   fontWeight:FontWeight.bold,
                 ),
               ),
             ),
 
-            const SizedBox(height:12),
+            const SizedBox(height:15),
 
+            /// CATEGORY SCROLL
             SizedBox(
-              height:90,
+              height:95,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
@@ -178,12 +187,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   var category = categories[index];
 
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:10),
+                    padding: const EdgeInsets.symmetric(horizontal:12),
                     child: Column(
                       children: [
 
                         Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
@@ -200,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        const SizedBox(height:5),
+                        const SizedBox(height:6),
 
                         Text(category["name"])
 
@@ -212,32 +221,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            const SizedBox(height:20),
+            const SizedBox(height:25),
 
+            /// PRODUCTS TITLE
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal:12),
+              padding: EdgeInsets.symmetric(horizontal:16),
               child: Text(
                 "Popular Products",
                 style: TextStyle(
-                  fontSize:18,
+                  fontSize:20,
                   fontWeight:FontWeight.bold,
                 ),
               ),
             ),
 
-            const SizedBox(height:12),
+            const SizedBox(height:15),
 
+            /// PRODUCT GRID
             GridView.builder(
               shrinkWrap:true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal:12),
+              padding: const EdgeInsets.symmetric(horizontal:16),
               itemCount: products.length,
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount:2,
-                crossAxisSpacing:10,
-                mainAxisSpacing:10,
-                childAspectRatio:0.8,
+                crossAxisSpacing:14,
+                mainAxisSpacing:14,
+                childAspectRatio:0.78,
               ),
 
               itemBuilder:(context,index){
@@ -245,14 +256,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 var product = products[index];
 
                 return Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     boxShadow:[
                       BoxShadow(
                         color: Colors.grey.shade300,
-                        blurRadius:5,
+                        blurRadius:6,
                       )
                     ],
                   ),
@@ -264,7 +275,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       const SizedBox(height:10),
 
-                      Text(product["name"]),
+                      Text(
+                        product["name"],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      const SizedBox(height:5),
 
                       Text(
                         "₹${product["price"]}",
@@ -273,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      const SizedBox(height:8),
+                      const Spacer(),
 
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -302,15 +320,15 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            const SizedBox(height:80)
+            const SizedBox(height:90)
 
           ],
         ),
       ),
 
+      /// BOTTOM NAVIGATION
       bottomNavigationBar: BottomNavigationBar(
 
-        currentIndex: navIndex,
         selectedItemColor: Colors.green,
 
         onTap:(index){
