@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'cart_screen.dart';
-import 'subscription_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,26 +12,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int cartCount = 0;
-  List cartItems = [];
   double total = 0;
+  List cartItems = [];
 
-  final List bannerImages = [
-    "assets/images/banner1.png",
-    "assets/images/banner2.png",
+  final List banners = [
+    "assets/images/banner.png",
+    "assets/images/banner.png"
   ];
 
   final List categories = [
-    {"name": "Milk", "image": "assets/images/milk.png"},
-    {"name": "Fruits", "image": "assets/images/fruits.png"},
-    {"name": "Vegetables", "image": "assets/images/vegetables.png"},
-    {"name": "Dairy", "image": "assets/images/dairy.png"},
+    {"name":"Milk","image":"assets/images/milk.png"},
+    {"name":"Fruits","image":"assets/images/fruits.png"},
+    {"name":"Vegetables","image":"assets/images/vegetables.png"},
+    {"name":"Dairy","image":"assets/images/dairy.png"}
   ];
 
   final List products = [
-    {"name": "Cow Milk", "price": 60, "image": "assets/images/milk.png"},
-    {"name": "Buffalo Milk", "price": 70, "image": "assets/images/milk.png"},
-    {"name": "Apple", "price": 120, "image": "assets/images/fruits.png"},
-    {"name": "Banana", "price": 50, "image": "assets/images/fruits.png"},
+    {"name":"Cow Milk","price":60,"image":"assets/images/milk.png"},
+    {"name":"Buffalo Milk","price":70,"image":"assets/images/milk.png"},
+    {"name":"Apple","price":120,"image":"assets/images/fruits.png"},
+    {"name":"Banana","price":50,"image":"assets/images/fruits.png"},
   ];
 
   @override
@@ -40,13 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
 
-      backgroundColor: Colors.grey[100],
-
       appBar: AppBar(
         backgroundColor: Colors.green,
-        elevation: 0,
         title: const Text("CRUDO"),
-
         actions: [
 
           Stack(
@@ -54,8 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
-                onPressed: () {
-
+                onPressed: (){
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -65,14 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   );
-
                 },
               ),
 
               if(cartCount>0)
               Positioned(
-                right: 6,
-                top: 6,
+                right:5,
+                top:5,
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
@@ -83,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     cartCount.toString(),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize:12,
                     ),
                   ),
                 ),
@@ -103,31 +96,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:10),
 
-            /// LOCATION
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal:16),
-              child: Text(
-                "Deliver to Bharathi",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-
-            const SizedBox(height:10),
-
             /// SEARCH BAR
             Padding(
               padding: const EdgeInsets.symmetric(horizontal:16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: "Search milk, fruits, vegetables...",
+                  hintText: "Search milk, fruits, vegetables",
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                 ),
@@ -139,16 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
             /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
-                height: 170,
-                viewportFraction: 1,
-                autoPlay: true,
+                height:180,
+                autoPlay:true,
+                viewportFraction:1,
               ),
-              items: bannerImages.map((img){
+
+              items: banners.map((img){
 
                 return Container(
-                  margin: const EdgeInsets.symmetric(horizontal:12),
+                  margin: const EdgeInsets.symmetric(horizontal:10),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
                       img,
                       width: double.infinity,
@@ -160,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
 
-            const SizedBox(height:25),
+            const SizedBox(height:20),
 
             /// CATEGORY TITLE
             const Padding(
@@ -169,19 +149,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Categories",
                 style: TextStyle(
                   fontSize:20,
-                  fontWeight:FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
 
             const SizedBox(height:15),
 
-            /// CATEGORY SCROLL
+            /// CATEGORY LIST
             SizedBox(
-              height:95,
+              height:100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
+
                 itemBuilder:(context,index){
 
                   var category = categories[index];
@@ -209,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        const SizedBox(height:6),
+                        const SizedBox(height:5),
 
                         Text(category["name"])
 
@@ -221,34 +202,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            const SizedBox(height:25),
+            const SizedBox(height:20),
 
-            /// PRODUCTS TITLE
+            /// POPULAR PRODUCTS
             const Padding(
               padding: EdgeInsets.symmetric(horizontal:16),
               child: Text(
                 "Popular Products",
                 style: TextStyle(
                   fontSize:20,
-                  fontWeight:FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
 
             const SizedBox(height:15),
 
-            /// PRODUCT GRID
             GridView.builder(
               shrinkWrap:true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal:16),
               itemCount: products.length,
+
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount:2,
-                crossAxisSpacing:14,
-                mainAxisSpacing:14,
-                childAspectRatio:0.78,
+                crossAxisSpacing:15,
+                mainAxisSpacing:15,
+                childAspectRatio:0.8,
               ),
 
               itemBuilder:(context,index){
@@ -256,14 +237,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 var product = products[index];
 
                 return Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(15),
                     boxShadow:[
                       BoxShadow(
                         color: Colors.grey.shade300,
-                        blurRadius:6,
+                        blurRadius:5,
                       )
                     ],
                   ),
@@ -271,25 +252,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
 
-                      Image.asset(product["image"], height:70),
+                      Image.asset(product["image"],height:70),
 
                       const SizedBox(height:10),
 
                       Text(
                         product["name"],
                         style: const TextStyle(
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
 
                       const SizedBox(height:5),
 
-                      Text(
-                        "₹${product["price"]}",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text("₹${product["price"]}"),
 
                       const Spacer(),
 
@@ -302,9 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
 
                             cartItems.add(product);
-
                             cartCount = cartItems.length;
-
                             total += product["price"];
 
                           });
@@ -320,69 +294,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            const SizedBox(height:90)
+            const SizedBox(height:80)
 
           ],
         ),
-      ),
-
-      /// BOTTOM NAVIGATION
-      bottomNavigationBar: BottomNavigationBar(
-
-        selectedItemColor: Colors.green,
-
-        onTap:(index){
-
-          if(index==1){
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:(context)=> const SubscriptionScreen(),
-              ),
-            );
-
-          }
-
-          if(index==2){
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:(context)=> CartScreen(
-                  cartItems: cartItems,
-                  total: total,
-                ),
-              ),
-            );
-
-          }
-
-        },
-
-        items: const [
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.repeat),
-            label: "Subscription",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-
-        ],
       ),
 
     );
