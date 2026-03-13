@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
-import '../services/cart_service.dart';
 import 'checkout_screen.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class CartScreen extends StatelessWidget {
 
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
+  final List cartItems;
+  final double total;
 
-class _CartScreenState extends State<CartScreen> {
-
-  int total = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    calculateTotal();
-  }
-
-  void calculateTotal(){
-    total = 0;
-
-    for(var item in CartService.cartItems){
-      total += item.price;
-    }
-  }
+  const CartScreen({
+    super.key,
+    required this.cartItems,
+    required this.total,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,51 +19,61 @@ class _CartScreenState extends State<CartScreen> {
 
       appBar: AppBar(
         title: const Text("Cart"),
+        backgroundColor: Colors.green,
       ),
 
       body: Column(
-
         children: [
 
           Expanded(
             child: ListView.builder(
-              itemCount: CartService.cartItems.length,
-              itemBuilder: (context,index){
+              itemCount: cartItems.length,
+              itemBuilder:(context,index){
 
-                var product = CartService.cartItems[index];
+                var item = cartItems[index];
 
                 return ListTile(
-                  leading: Image.asset(product.image,width:50),
-                  title: Text(product.name),
-                  trailing: Text("₹${product.price}"),
+                  leading: Image.asset(item["image"], width:50),
+                  title: Text(item["name"]),
+                  trailing: Text("₹${item["price"]}"),
                 );
+
               },
             ),
           ),
 
-          Container(
-            padding: const EdgeInsets.all(15),
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
 
                 Text(
                   "Total ₹$total",
-                  style: const TextStyle(fontSize:20,fontWeight:FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize:22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
-                const SizedBox(height:10),
+                const SizedBox(height:15),
 
                 ElevatedButton(
-                  onPressed: (){
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    minimumSize: const Size(double.infinity,50),
+                  ),
+                  onPressed:(){
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const CheckoutScreen(),
+                        builder:(context)=> const CheckoutScreen(),
                       ),
                     );
+
                   },
                   child: const Text("Checkout"),
-                )
+                ),
 
               ],
             ),
