@@ -15,12 +15,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int cartCount = 0;
   int navIndex = 0;
 
+  List cartItems = [];
+  double total = 0;
+
   final List bannerImages = [
     "assets/images/banner1.png",
     "assets/images/banner2.png",
   ];
 
-  final List quickCategories = [
+  final List categories = [
     {"name": "Milk", "image": "assets/images/milk.png"},
     {"name": "Fruits", "image": "assets/images/fruits.png"},
     {"name": "Vegetables", "image": "assets/images/vegetables.png"},
@@ -42,9 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey[100],
 
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        elevation: 0,
         title: const Text("CRUDO"),
+        backgroundColor: Colors.green,
         actions: [
 
           Stack(
@@ -53,12 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
                 onPressed: () {
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CartScreen(),
+                      builder: (context) => CartScreen(
+                        cartItems: cartItems,
+                        total: total,
+                      ),
                     ),
                   );
+
                 },
               ),
 
@@ -80,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              ),
+              )
 
             ],
           )
@@ -94,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            /// LOCATION
             const Padding(
               padding: EdgeInsets.all(12),
               child: Text(
@@ -106,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            /// SEARCH BAR
             Padding(
               padding: const EdgeInsets.symmetric(horizontal:12),
               child: TextField(
@@ -125,22 +130,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:15),
 
-            /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
-                height: 160,
-                autoPlay: true,
-                viewportFraction: 1,
+                height:170,
+                viewportFraction:1,
+                autoPlay:true,
               ),
-              items: bannerImages.map((img){
+              items: bannerImages.map((img) {
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:10),
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal:10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       img,
-                      width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -151,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:20),
 
-            /// QUICK CATEGORIES
             const Padding(
               padding: EdgeInsets.symmetric(horizontal:12),
               child: Text(
@@ -169,10 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height:90,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: quickCategories.length,
+                itemCount: categories.length,
                 itemBuilder:(context,index){
 
-                  var category = quickCategories[index];
+                  var category = categories[index];
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal:10),
@@ -211,7 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height:20),
 
-            /// POPULAR PRODUCTS
             const Padding(
               padding: EdgeInsets.symmetric(horizontal:12),
               child: Text(
@@ -226,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height:12),
 
             GridView.builder(
-              shrinkWrap: true,
+              shrinkWrap:true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal:12),
               itemCount: products.length,
@@ -280,7 +282,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: (){
 
                           setState(() {
-                            cartCount++;
+
+                            cartItems.add(product);
+
+                            cartCount = cartItems.length;
+
+                            total += product["price"];
+
                           });
 
                         },
@@ -292,48 +300,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
 
               },
-            ),
-
-            const SizedBox(height:20),
-
-            /// SUBSCRIPTION CARD
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-
-                    const Expanded(
-                      child: Text(
-                        "Daily Milk Subscription\nSave 10%",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-
-                    ElevatedButton(
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context)=> const SubscriptionScreen(),
-                          ),
-                        );
-                      },
-                      child: const Text("Subscribe"),
-                    )
-
-                  ],
-                ),
-              ),
             ),
 
             const SizedBox(height:80)
@@ -350,21 +316,28 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap:(index){
 
           if(index==1){
+
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder:(context)=> const SubscriptionScreen(),
               ),
             );
+
           }
 
           if(index==2){
+
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder:(context)=> const CartScreen(),
+                builder:(context)=> CartScreen(
+                  cartItems: cartItems,
+                  total: total,
+                ),
               ),
             );
+
           }
 
         },
