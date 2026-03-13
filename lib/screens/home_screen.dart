@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'cart_screen.dart';
+import 'subscription_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,12 +13,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int cartCount = 0;
+  int navIndex = 0;
 
-  final List banners = [
+  final List bannerImages = [
     "assets/images/banner1.png",
+    "assets/images/banner2.png",
   ];
 
-  final List categories = [
+  final List quickCategories = [
     {"name": "Milk", "image": "assets/images/milk.png"},
     {"name": "Fruits", "image": "assets/images/fruits.png"},
     {"name": "Vegetables", "image": "assets/images/vegetables.png"},
@@ -24,28 +28,41 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List products = [
-    {"name": "Cow Milk", "price": "₹60", "image": "assets/images/milk.png"},
-    {"name": "Buffalo Milk", "price": "₹70", "image": "assets/images/milk.png"},
-    {"name": "Apple", "price": "₹120", "image": "assets/images/fruits.png"},
-    {"name": "Banana", "price": "₹60", "image": "assets/images/fruits.png"},
+    {"name": "Cow Milk", "price": 60, "image": "assets/images/milk.png"},
+    {"name": "Buffalo Milk", "price": 70, "image": "assets/images/milk.png"},
+    {"name": "Apple", "price": 120, "image": "assets/images/fruits.png"},
+    {"name": "Banana", "price": 50, "image": "assets/images/fruits.png"},
   ];
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
+      backgroundColor: Colors.grey[100],
 
       appBar: AppBar(
         backgroundColor: Colors.green,
+        elevation: 0,
         title: const Text("CRUDO"),
         actions: [
 
           Stack(
             children: [
+
               IconButton(
                 icon: const Icon(Icons.shopping_cart),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartScreen(),
+                    ),
+                  );
+                },
               ),
 
+              if(cartCount>0)
               Positioned(
                 right: 5,
                 top: 5,
@@ -57,10 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Text(
                     cartCount.toString(),
-                    style: const TextStyle(color: Colors.white,fontSize: 12),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-              )
+              ),
+
             ],
           )
 
@@ -68,26 +89,58 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       body: SingleChildScrollView(
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            /// BANNER
+            /// LOCATION
+            const Padding(
+              padding: EdgeInsets.all(12),
+              child: Text(
+                "Deliver to Bharathi",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+
+            /// SEARCH BAR
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:12),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search milk, fruits, vegetables...",
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height:15),
+
+            /// BANNER SLIDER
             CarouselSlider(
               options: CarouselOptions(
-                height: 180,
+                height: 160,
                 autoPlay: true,
-                viewportFraction: 0.95,
-                enlargeCenterPage: true,
+                viewportFraction: 1,
               ),
-              items: banners.map((image) {
+              items: bannerImages.map((img){
 
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: AssetImage(image),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      img,
+                      width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -96,90 +149,96 @@ class _HomeScreenState extends State<HomeScreen> {
               }).toList(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height:20),
 
-            /// CATEGORY TITLE
+            /// QUICK CATEGORIES
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal:12),
               child: Text(
-                "Shop by Category",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                "Categories",
+                style: TextStyle(
+                  fontSize:18,
+                  fontWeight:FontWeight.bold,
+                ),
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height:12),
 
-            /// CATEGORY GRID
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              itemCount: categories.length,
-              gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  childAspectRatio: 1.2),
+            SizedBox(
+              height:90,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: quickCategories.length,
+                itemBuilder:(context,index){
 
-              itemBuilder: (context,index){
+                  var category = quickCategories[index];
 
-                var category = categories[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:10),
+                    child: Column(
+                      children: [
 
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(color: Colors.grey.shade300,blurRadius: 5)
-                    ],
-                  ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow:[
+                              BoxShadow(
+                                color: Colors.grey.shade300,
+                                blurRadius:5,
+                              )
+                            ],
+                          ),
+                          child: Image.asset(
+                            category["image"],
+                            height:40,
+                          ),
+                        ),
 
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                        const SizedBox(height:5),
 
-                      Image.asset(category["image"],height:70),
+                        Text(category["name"])
 
-                      const SizedBox(height:10),
+                      ],
+                    ),
+                  );
 
-                      Text(
-                        category["name"],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                );
-              },
+                },
+              ),
             ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height:20),
 
-            /// PRODUCT TITLE
+            /// POPULAR PRODUCTS
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal:12),
               child: Text(
                 "Popular Products",
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize:18,
+                  fontWeight:FontWeight.bold,
+                ),
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height:12),
 
-            /// PRODUCT GRID
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal:12),
               itemCount: products.length,
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  childAspectRatio: 0.8),
+                crossAxisCount:2,
+                crossAxisSpacing:10,
+                mainAxisSpacing:10,
+                childAspectRatio:0.8,
+              ),
 
-              itemBuilder: (context,index){
+              itemBuilder:(context,index){
 
                 var product = products[index];
 
@@ -187,43 +246,45 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(color: Colors.grey.shade300,blurRadius: 5)
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow:[
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius:5,
+                      )
                     ],
                   ),
 
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
-                      Image.asset(product["image"],height:70),
+                      Image.asset(product["image"], height:70),
 
                       const SizedBox(height:10),
 
                       Text(product["name"]),
 
-                      const SizedBox(height:5),
-
                       Text(
-                        product["price"],
+                        "₹${product["price"]}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height:10),
+                      const SizedBox(height:8),
 
                       ElevatedButton(
-                        onPressed: (){
-                          setState(() {
-                            cartCount++;
-                          });
-                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                         ),
-                        child: const Text("Add"),
+                        onPressed: (){
+
+                          setState(() {
+                            cartCount++;
+                          });
+
+                        },
+                        child: const Text("ADD"),
                       )
 
                     ],
@@ -233,14 +294,81 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            const SizedBox(height: 80)
+            const SizedBox(height:20),
+
+            /// SUBSCRIPTION CARD
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+
+                    const Expanded(
+                      child: Text(
+                        "Daily Milk Subscription\nSave 10%",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize:16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context)=> const SubscriptionScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text("Subscribe"),
+                    )
+
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height:80)
 
           ],
         ),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
+
+        currentIndex: navIndex,
         selectedItemColor: Colors.green,
+
+        onTap:(index){
+
+          if(index==1){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:(context)=> const SubscriptionScreen(),
+              ),
+            );
+          }
+
+          if(index==2){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:(context)=> const CartScreen(),
+              ),
+            );
+          }
+
+        },
+
         items: const [
 
           BottomNavigationBarItem(
@@ -262,8 +390,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.person),
             label: "Profile",
           ),
+
         ],
       ),
+
     );
   }
 }
