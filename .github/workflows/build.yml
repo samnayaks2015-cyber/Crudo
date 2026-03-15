@@ -1,45 +1,18 @@
 name: Build APK
 
-on:
-push:
-branches: [ main ]
+on: [push]
 
 jobs:
 build:
 runs-on: ubuntu-latest
 
 steps:
-  - name: Checkout
-    uses: actions/checkout@v3
+  - uses: actions/checkout@v3
 
-  - name: Setup Flutter
-    uses: subosito/flutter-action@v2
+  - uses: subosito/flutter-action@v2
     with:
-      flutter-version: "3.22.0"
+      flutter-version: '3.22.0'
 
-  - name: Create fresh Flutter project
-    run: |
-      flutter create app
-      rm -rf app/lib
-      cp -r lib app/
+  - run: flutter pub get
 
-  - name: Copy pubspec
-    run: |
-      rm app/pubspec.yaml
-      cp pubspec.yaml app/
-
-  - name: Get packages
-    run: |
-      cd app
-      flutter pub get
-
-  - name: Build APK
-    run: |
-      cd app
-      flutter build apk --release
-
-  - name: Upload APK
-    uses: actions/upload-artifact@v4
-    with:
-      name: crudo-apk
-      path: app/build/app/outputs/flutter-apk/app-release.apk
+  - run: flutter build apk --release
